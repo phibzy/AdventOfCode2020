@@ -13,15 +13,6 @@ import re, sys
 # Will make this a dict for constant lookup time
 expectedFields = {"byr": 1, "iyr": 1, "eyr": 1, "hgt": 1, "hcl": 1, "ecl": 1, "pid": 1}
 
-
-
-
-
-
-
-
-
-
 def strToInput(s):
     # Split input on empty lines
     inp = s.split("\n\n")  
@@ -51,7 +42,8 @@ def checkPassport(passport):
             # Part 1 spec says no duplicates so this should be safe
             if k == "cid": continue
 
-            # For possible whacky cases
+            # For possible whacky cases where there are
+            # unexpected fields
             if k not in expectedFields: return False
 
             del cFields[k]
@@ -64,9 +56,14 @@ def checkPassport(passport):
 
 def checkFields(k,v):
     # Want to find a groovy way to do this lol
-    checks = {"byr": byr, "iyr": iyr, "eyr": eyr, "hgt": hgt, "hcl": hcl, "ecl": ecl, "pid": pid}
+    # checks = {"byr": byr, "iyr": iyr, "eyr": eyr, "hgt": hgt, "hcl": hcl, "ecl": ecl, "pid": pid}
 
-    return checks[k](v) 
+    # return checks[k](v) 
+
+    # Alternative hacky way
+    return globals().get(k)(v)
+
+######### FIELD CHECK FUNCTIONS ####################
 
 def byr(v):
     # Has to be 4 digits
@@ -114,10 +111,12 @@ def ecl(v):
 # Regex check for 9 digit number
 def pid(v):
     return re.match(r"^[0-9]{9}$", v) is not None
+
+######################################################
     
 inp = list()
 
-# stdin.read() while read in the whole of stdin as
+# stdin.read() will read in the whole of stdin as
 # one string, including newlines etc.
 rawInp = sys.stdin.read()
 

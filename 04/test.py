@@ -2,8 +2,8 @@
 
 """
     Test Cases:
-
-
+        - Testing each checking function
+        - Making sure checkFields function calls are working
 
 """
 
