@@ -44,7 +44,7 @@ def checkPassport(passport):
         # Delete fields as we see them from checkFields
         # if there's 0 keys left in checkFields at the end
         # of iteration, then input has all required fields
-        checkFields = expectedFields.copy()
+        cFields = expectedFields.copy()
 
         # \S matches any character that isn't whitespace
         for k, v in re.findall(r"(\S*):(\S*)", passport):
@@ -54,25 +54,36 @@ def checkPassport(passport):
             # For possible whacky cases
             if k not in expectedFields: return False
 
-            del checkFields[k]
+            del cFields[k]
 
             # For pt. 2
             if not checkFields(k,v): return False
 
         # checkFields length will be 0 if passport has all required fields
-        return len(checkFields) == 0
+        return len(cFields) == 0
 
 def checkFields(k,v):
     # Want to find a groovy way to do this lol
-    return globals().get(k)(v)
+    checks = {"byr": byr, "iyr": iyr, "eyr": eyr, "hgt": hgt, "hcl": hcl, "ecl": ecl, "pid": pid}
+
+    return checks[k](v) 
 
 def byr(v):
+    # Has to be 4 digits
+    if len(v) != 4: return False
+
     return 1920 <= int(v) <= 2002
 
 def iyr(v):
+    # Has to be 4 digits
+    if len(v) != 4: return False
+
     return 2010 <= int(v) <= 2020
 
 def eyr(v):
+    # Has to be 4 digits
+    if len(v) != 4: return False
+
     return 2020 <= int(v) <= 2030
 
 def hgt(v):
