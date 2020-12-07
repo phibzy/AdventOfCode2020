@@ -9,12 +9,9 @@
 
 import sys, re
 
-#DFS time
+# DFS time
 
-# bag descriptions are three words
-# match on {2}w bags, turn 2w into camelcase
-# split on "contain"
-# be careful of bag/bags case
+# bag descriptions are two words followed by bag(s)
 def parseLine(line, bags):
     # split on ' contain '
     # want to grab bag which is subject of rule,
@@ -88,8 +85,35 @@ def DFS(bags, startBag, targetBag):
             s.append(bag)
 
     return 0
+
+
+# We'll do this recursively because laziness
+# TC: O(N) - worst every bag type is in our bag
+# SC: O(N) - Same as above, resulting in N calls on stack
+# Iterative method: same as above but with tuples to keep track
+# of multipliers
+def sumBagsR(bags, startBag):
+    bagCount = 1
+
+    # For each bag contained within our chosen bag
+    for bag in bags[startBag]:
         
-# print(parseLine("vibrant bronze bags contain no other bags.", dict()))
-# print(sys.stdin.read())
-bags = parseInput(sys.stdin.read())
-print(countPaths(bags, "shiny gold"))
+        # Add the amount of that bag * the number of bags
+        # in their contents
+        bagCount += bags[startBag][bag]*sumBagsR(bags, bag)
+
+    return bagCount
+
+def sumBags(bags, startBag):
+    # We don't include the starting bag
+    # because we're only counting how many bags
+    # there are inside of it
+    return sumBagsR(bags, startBag) - 1
+
+# Create a dict with each different bag name as keys,
+# with their values being a dict with bagName/quantity pairs
+# bags = parseInput(sys.stdin.read())
+
+# print(countPaths(bags, "shiny gold"))
+# print(sumBags(bags, "shinygold"))
+
