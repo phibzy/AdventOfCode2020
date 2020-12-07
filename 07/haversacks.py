@@ -48,14 +48,48 @@ def parseInput(inp):
     bags = dict()
 
     # Add rule to dict
-    for line in inp:
+    for line in inp.splitlines():
         parseLine(line, bags)
 
     return bags
 
-#
-def DFS(bags):
-    pass
+def countPaths(bags, targetBag):
+    # change the bagname to match field in dict
+    targetBag = ''.join(targetBag.split())
+    
+    count = 0
 
-print(parseLine("vibrant bronze bags contain no other bags.", dict()))
-# bags = parseInput(sys.stdin.read())
+    for bag in bags:
+        if bag == targetBag: continue
+        count += DFS(bags, bag, targetBag)
+
+    return count
+
+# DFS for target bag name
+# we'll try do it iteratively for once
+# return 1 if found, 0 if not
+def DFS(bags, startBag, targetBag):
+    # stack for DFS, visited dict to prevent cycles
+    s = list()
+    visited = dict()
+    s.append(startBag)
+
+    while s:
+        nextBag = s.pop()
+
+        for bag in bags[nextBag]:
+            # Don't bother if we've already seen it before
+            if bag in visited: continue
+
+            # Return true if we find the target
+            if bag == targetBag: return 1 
+
+            # Otherwise keep looking
+            s.append(bag)
+
+    return 0
+        
+# print(parseLine("vibrant bronze bags contain no other bags.", dict()))
+# print(sys.stdin.read())
+bags = parseInput(sys.stdin.read())
+print(countPaths(bags, "shiny gold"))
