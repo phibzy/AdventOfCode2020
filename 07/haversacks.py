@@ -11,33 +11,11 @@ import sys, re
 
 #DFS time
 
-bags = dict()
-
-# # dict of dicts for bag possibilities
-# bags = {"lightRed": lightRed, "darkOrange": darkOrange, "brightWhite": brightWhite,
-        # "mutedYellow": mutedYellow, "shinyGold": shinyGold, "darkOlive": darkOlive,
-        # "vibrantPlum": vibrantPlum, "fadedBlue": fadedBlue, "dottedBlack": dottedBlack}
-
-# # Bag rules
-
-# lightRed = {'brightWhite': 1, "mutedYellow": 2}
-# darkOrange = {'brightWhite': 3, "mutedYellow": 4}
-# brightWhite = {'shinyGold': 1}
-# mutedYellow = {'shinyGold': 2, "fadedBlue": 9}
-# shinyGold = {'darkOlive': 1, "vibrantPlum": 2}
-# darkOlive = {'fadedBlue': 3, "dottedBlack": 4}
-# vibrantPlum = {'fadedBlue': 5, "dottedBlack": 6}
-# fadedBlue = dict()
-# dottedBlack = dict()
-
-# Just apply above thinking but do it dynamically haha
-
 # bag descriptions are three words
 # match on {2}w bags, turn 2w into camelcase
 # split on "contain"
 # be careful of bag/bags case
-
-def parseLine(line):
+def parseLine(line, bags):
     # split on ' contain '
     # want to grab bag which is subject of rule,
     # then its list of rules
@@ -49,6 +27,9 @@ def parseLine(line):
     # add to bag dict if it hasn't been already
     bags.setdefault(subjectBag, dict())
 
+    # "contain no other bags" case
+    if re.match("no other bags", ruleBags): return bags
+
     # then add all the ruleBags as rules to subjectBag's dict
     for bag in ruleBags.split(', '):
         match = re.findall(r"^([1-9][0-9]*) ([a-z]+) ([a-z]+)", bag)[0]
@@ -59,4 +40,22 @@ def parseLine(line):
         # add to dict
         bags[subjectBag][bagName] = quantity
 
-parseLine("muted tomato bags contain 1 bright brown bag, 1 dotted gold bag, 2 faded gray bags, 1 posh yellow bag.")
+    # So testing is easier
+    return bags
+
+def parseInput(inp):
+    # dict of dicts for bag possibilities
+    bags = dict()
+
+    # Add rule to dict
+    for line in inp:
+        parseLine(line, bags)
+
+    return bags
+
+#
+def DFS(bags):
+    pass
+
+print(parseLine("vibrant bronze bags contain no other bags.", dict()))
+# bags = parseInput(sys.stdin.read())
