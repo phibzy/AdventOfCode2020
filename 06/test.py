@@ -9,8 +9,9 @@
 
 import unittest
 from customs import groupCount, totalCount
+from customs import golfPt1, golfPt2
 
-class test(unittest.TestCase):
+class testCustoms(unittest.TestCase):
 
     def testGroupCount1(self):
         self.assertEqual(groupCount(['a','b','c','d','e'], 1), 5)
@@ -47,3 +48,39 @@ a
 b"""
         self.assertEqual(totalCount(s, 1), 11)
         self.assertEqual(totalCount(s, 2), 6)
+
+    def testGolfPt1(self):
+        s = r"""abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b"""
+        self.assertEqual(golfPt1(s), 11)
+
+    def testGolfPt2(self):
+        s = r"""abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b"""
+        self.assertEqual(golfPt2(s), 6)

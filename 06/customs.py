@@ -55,5 +55,16 @@ def groupCount(group, f):
     # For pt. 2
     return len(allYes)
 
+# Part 1 - one liner edition
+def golfPt1(s):
+    # Return the sum of the length of each set
+    # of characters made up of each character in a group of forms
+    return sum(len(uniq) for uniq in [set(ch) for group in s.split("\n\n") for ch in [''.join(group.split())]])
+
+# Part 2 - one liner edition
+def golfPt2(s):
+    return [j for i in [ch for group in s.split("\n\n") for form in [group.split()] for ch in [form]] for j in i]
+
+print(golfPt2(sys.stdin.read()))
 # print(totalCount("aaZaaa", 2))
 # print(totalCount(sys.stdin.read(), 2))
