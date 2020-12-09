@@ -15,6 +15,7 @@ Algo:
 
 """
 import re, sys
+import pprint
 
 def findValue(commands, visited, start):
     # Our total accumulated value
@@ -24,7 +25,7 @@ def findValue(commands, visited, start):
     signVal = {"+": 1, "-": -1}
 
     # flags for infinite loop, last nop/jmp indices
-    inf, nops, lastJmp = False, list(), -1
+    inf, nops, jmps = False, list(), list()
 
     i = start
     while i < len(commands):
@@ -38,10 +39,10 @@ def findValue(commands, visited, start):
         instruction, sign, val = commands[i] 
         calc = signVal[sign]*int(val)
 
-        
         # A jump instruction means we just change the index value
         if instruction == "jmp":
-            lastJmp = i
+            # Keep track of visited indices at this point
+            jmps.append((i, total, visited.copy()))
 
             # Plussing negatives is the same as minusing
             i += calc
@@ -59,28 +60,26 @@ def findValue(commands, visited, start):
             # for nops and accs we keep going sequentially
             i += 1
 
-    return (total, inf, lastJmp, nops)
+    return (total, inf, jmps, nops)
 
-# Finds infinite loop (if exists), then checks whether other infinite loops exist in remaining
-# command list. If not, it changes the lastJmp instruction into a nop.
-# Otherwise, we go through list of nops to find one that when instruction is changed
-# into a jmp, the program will run to completion
+# Algo: for each jump instruction in a looping list of commands, check if 
+# changing it to nop fixes issue
+# failing that do the same with the nop instructions
 def fixedValue(commands):
     # dict that keeps track of visited indices
     visited = dict()
 
     # Have to preserve command list in each call, since we
     # could end up jumping backwards
-    total, inf, lastJmp, nops = findValue(commands, visited, 0)
+    total, inf, jmps, nops = findValue(commands, visited, 0)
 
-    # Check if changing the looping jmp to a nop fixes our problem
     if inf:
-        print(visited)
-        nextTotal, inf, _, _ = findValue(commands, visited, lastJmp + 1)
-        print(visited)
 
-        # If there's no more infinite loops we're done here
-        if not inf: return total + nextTotal
+        for i, accTotal, v in jmps:
+            nextTotal, inf, _, _ = findValue(commands, v, i + 1)
+
+            # If there's no more infinite loops we're done here
+            if not inf: return accTotal + nextTotal
 
         # for each nop, check if changing it to jmp results in terminating program
         for i, targetI, accTotal, v in nops:
@@ -88,15 +87,12 @@ def fixedValue(commands):
 
             if not inf: return accTotal + nextTotal
 
-
-
-
 # function for parsing input so tests are easier
 def parseInput(inp):
     return [ re.findall(r"^([a-z]{3}) ([\+\-])([0-9]+)", line)[0] for line in inp.strip().split('\n') ]
 
-commands = parseInput(sys.stdin.read())
-print(commands)
-# print(findValue(commands, dict(), 0))
+# commands = parseInput(sys.stdin.read())
+# # # print(commands)
+# pprint.pprint(findValue(commands, dict(), 0))
 # print(fixedValue(commands))
 
