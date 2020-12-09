@@ -64,8 +64,30 @@ def checkSum(nextSum, nums):
 
 # We'll use a sliding window for this
 def findSequence(inp, targetSum):
-    pass
+    # window needs to be at least two numbers long
+    start, end = 0, 1 
+    total = inp[start] + inp[end]
 
-# inp = list(map(int, sys.stdin.readlines()))
-# N = 25
+    while start < len(inp) and end < len(inp):
+        # If we have the sum, return sum of smallest and largest
+        # number in window's range
+        if total == targetSum:
+            r = inp[start:end+1]
+            return min(r) + max(r)
+        
+        # if window total larger than target, trim
+        # window down 
+        if total > targetSum:
+            while total > targetSum and end > start:
+                total -= inp[start]
+                start += 1
+
+        # otherwise expand the window
+        else:
+            end += 1
+            total += inp[end]
+
+inp = list(map(int, sys.stdin.readlines()))
+N = 25
 # print(findNumber(inp, N, *parsePreamble(inp, N)))
+print(findSequence(inp, findNumber(inp, N, *parsePreamble(inp, N))))
