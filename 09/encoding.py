@@ -22,7 +22,7 @@ def parsePreamble(inp, n):
     order = deque()
 
     for i in range(n):
-        nextNum = int(inp[i])
+        nextNum = inp[i]
 
         nums.setdefault(nextNum, 0)
         nums[nextNum] += 1
@@ -36,7 +36,7 @@ def parsePreamble(inp, n):
 def findNumber(inp, n, nums, order):
     # start at the first index after preamble
     for i in range(n+1, len(inp)):
-        nextNum = int(inp[i])
+        nextNum = inp[i]
 
         # if current number isn't a sum of two different 
         # numbers in previous n numbers, it's WRONG
@@ -62,6 +62,10 @@ def checkSum(nextSum, nums):
     # TC always O(N), could do version with early exit but wanted to golf it
     return len([(x, nextSum - x) for x in nums if x != (nextSum - x) and (nextSum - x) in nums ]) > 0
 
-inp = sys.stdin.readlines()
-N = 25
-print(findNumber(inp, N, *parsePreamble(inp, N)))
+# We'll use a sliding window for this
+def findSequence(inp, targetSum):
+    pass
+
+# inp = list(map(int, sys.stdin.readlines()))
+# N = 25
+# print(findNumber(inp, N, *parsePreamble(inp, N)))
