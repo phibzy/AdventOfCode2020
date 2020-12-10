@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python4
 
 """
     Test Cases:
@@ -10,13 +10,13 @@
 """
 
 import unittest
-from adapter import findJoltDist
+from adapter import findJoltDist, findPossiblePaths
 
 # Auto read input from test* files?
 
 class testAdapter(unittest.TestCase):
 
-    def testFindJoltDist(self):
+    def testFindJoltDistAndPt2(self):
         t1 = r"""16
 10
 15
@@ -29,7 +29,8 @@ class testAdapter(unittest.TestCase):
 12
 4"""
 
-        self.assertEqual(findJoltDist(convertInput(t1), 3), 35)
+        self.assertEqual(findJoltDist(convertInput(t1))[0], 35)
+        # self.assertEqual(findPossiblePaths(convertInput(t1)), 8)
 
         t2 = r"""28
 33
@@ -63,7 +64,15 @@ class testAdapter(unittest.TestCase):
 10
 3"""
 
-        self.assertEqual(findJoltDist(convertInput(t2), 3), 220)
+        self.assertEqual(findJoltDist(convertInput(t2))[0], 220)
+        # self.assertEqual(findPossiblePaths(convertInput(t2)), 19208)
+
+
+    def testPaths(self):
+        # Only one possible path
+        t1 = [3,6,9,12]
+        self.assertEqual(findPossiblePaths(t1), 1)
+        self.assertEqual(findPossiblePaths([0,1,4,5,6,7,10]), 4)
 
 def convertInput(inp):
     return list(map(int, inp.split("\n")))
