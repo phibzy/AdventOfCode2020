@@ -45,43 +45,41 @@ def findPossiblePaths(inp):
     inp += [0]
     inp.sort()
 
+    # print(f"inp: {inp}")
+
     return rDFS(inp, dict(), 0)
 
-    
+# DFS with DP    
 def rDFS(inp, visited, start):
-    # Diffs are only 1 or 3 (I checked)
+    # print("".rjust(20, "#"))
+    # Base case - no more numbers, only 1 path
+    # Do the same when we overshoot end of array
+    if start >= len(inp) - 1: return 1
+
     total = 1
 
-    while start < len(inp):
-        # If we've visited somewhere before,
-        # we just multiply what we have with the visited spot,
-        # because we know that the rest would have been visited too
-        if start in visited:
-            total *= visited[start]
-            break
+    # If already visited return the path value
+    if start in visited: return visited[start]
 
-        diff = inp[start] - inp[start - 1]
+    # Otherwise, check next 3 elements if valid
+    # and get their paths
+    currTotal = total
+    total*= rDFS(inp, visited, start + 1)
 
-        # A diff of 3 means there's only one path to the number
-        # after the next one
-        if diff != 3:
-            currT = total
+    l, r = 0,0
 
-            if start + 1 < len(inp) and (inp[start+1] - inp[start-1] <= 3):
-                visited[start + 1] = rDFS(inp, visited, start+1)
-                total += currT*visited[start + 1]
+    if start + 2 < len(inp) and (inp[start+2] - inp[start] <= 3):
+        l = currTotal*rDFS(inp, visited, start + 2)
 
-            if start + 2 < len(inp) and (inp[start+2] - inp[start-1] <= 3):
-                visited[start + 2] = rDFS(inp, visited, start+2)
-                total += currT*visited[start + 2]
-
-        start += 1
+    if start + 3 < len(inp) and (inp[start+3] - inp[start] <= 3):
+        r = currTotal*rDFS(inp, visited, start + 3)
+    
+    total = total + l + r
 
     visited[start] = total
     return total
 
-
-
 # Get input into list
-# ratings = list(map(int, sys.stdin.readlines()))
+ratings = list(map(int, sys.stdin.readlines()))
 # print(findJoltDist(ratings))
+print(findPossiblePaths(ratings))

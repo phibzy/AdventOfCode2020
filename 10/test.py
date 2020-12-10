@@ -3,9 +3,8 @@
 """
     Test Cases:
         - Default cases
-        - 0 result
-
-
+        - Only 1 path
+        - Only one steps
 
 """
 
@@ -30,7 +29,7 @@ class testAdapter(unittest.TestCase):
 4"""
 
         self.assertEqual(findJoltDist(convertInput(t1))[0], 35)
-        # self.assertEqual(findPossiblePaths(convertInput(t1)), 8)
+        self.assertEqual(findPossiblePaths(convertInput(t1)), 8)
 
         t2 = r"""28
 33
@@ -65,14 +64,15 @@ class testAdapter(unittest.TestCase):
 3"""
 
         self.assertEqual(findJoltDist(convertInput(t2))[0], 220)
-        # self.assertEqual(findPossiblePaths(convertInput(t2)), 19208)
+        self.assertEqual(findPossiblePaths(convertInput(t2)), 19208)
 
 
     def testPaths(self):
         # Only one possible path
         t1 = [3,6,9,12]
         self.assertEqual(findPossiblePaths(t1), 1)
-        self.assertEqual(findPossiblePaths([0,1,4,5,6,7,10]), 4)
+        self.assertEqual(findPossiblePaths([1,4,5,6,7,10]), 4)
+        self.assertEqual(findPossiblePaths([1,2,3,4,5,6]), 24)
 
 def convertInput(inp):
     return list(map(int, inp.split("\n")))
