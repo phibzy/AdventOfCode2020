@@ -9,18 +9,19 @@
 
 import sys
 
-# Get input into list
-ratings = list(map(int, sys.stdin.readlines()))
-
 # Put rating as arg because I'm sure that will
 # change in pt. 2 lmao
 def findJoltDist(inp, rating):
-    # sort input
+    # Need to add 0 to list since charging outlet
+    # joltage is 0
+    # sort input to make diff calculations easy
+    inp += [0]
     inp.sort()
 
     # counts for 1 and 3 differenes between jolts
-    # may need to make dict for pt. 2
-    oneDiff, threeDiff = 0, 0
+    # your devices built-in adapter is always 3 higher than 
+    # whatever your highest adapter is, so threeDiff starts at 1
+    oneDiff, threeDiff = 0, 1
 
     # compare with previous element (since sorted),
     # increment counters if diff equals 1 or 3
@@ -33,8 +34,6 @@ def findJoltDist(inp, rating):
 
     return oneDiff * threeDiff
 
-
-
-
-
-# print(ratings)
+# Get input into list
+ratings = list(map(int, sys.stdin.readlines()))
+print(findJoltDist(ratings, 3))
