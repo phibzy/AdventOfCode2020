@@ -18,7 +18,8 @@ def parseInput(inp):
     return [list(line) for line in inp.strip().split("\n")]
 
 def updateGrid(grid):
-    newGrid = [ [point] for row in range(len(grid)) for col in range(len(grid[row])) for point in [countAround(grid, row, col)]  ]
+    newGrid = [ [ updateSeat(grid,row,col) for col in range(len(grid[row])) ] for row in range(len(grid)) ]
+    newGrid = [ line for row in range(len(grid)) for line in [ updateSeat(grid,row,col) for col in range(len(grid[row])) ] ]
     return newGrid
 
 # Counts number of occupied seats around current seat
@@ -60,5 +61,5 @@ def updateSeat(grid, y, x):
     return grid[y][x]
 
 # This time, write tests based on filepaths
-# inp = sys.stdin.read()
-# pprint.pprint(updateGrid(parseInput(inp)))
+inp = sys.stdin.read()
+pprint.pprint(updateGrid(parseInput(inp)))
