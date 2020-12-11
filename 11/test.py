@@ -8,7 +8,7 @@
 """
 
 import unittest
-from seating import parseInput, updateGrid, countAround, updateSeat 
+from seating import parseInput, updateGrid, countAround, updateSeat, sumSeats
 from pathlib import Path
 import pprint
 
@@ -65,10 +65,10 @@ class testSeating(unittest.TestCase):
         self.assertEqual(countAround(parseInput(self.testFileContents[2]), 9, 9), 2) 
 
         self.assertEqual(countAround(self.parsedContents[3], 0, 5), 1)
-        # self.assertEqual(countAround(self.parsedContents[2], 0, 0), 2)
-        # self.assertEqual(countAround(self.parsedContents[2], 0, 0), 2)
 
     def testUpdateSeat(self):
         self.assertEqual(updateSeat(self.parsedContents[3], 0, 5), "L")
         self.assertEqual(updateSeat(self.parsedContents[3], 3, 5), "#")
-    
+
+    def testSumSeats(self):
+        self.assertEqual(sumSeats(self.parsedContents[6]), 37)

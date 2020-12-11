@@ -47,29 +47,37 @@ def updateSeat(grid, y, x):
     # We don't care about the floor
     if grid[y][x] == '.': return '.'
     
-    switch = {"#": "L", "L": "#"}
-
     # confirm which count we want
     numToCount = [EMPTY_CHECK, OCCUPIED_CHECK][grid[y][x] == "#"]
 
-    if y == 0 and x == 5:
-        print(f"numToCount: {numToCount}, \
-                countAround: {countAround(grid, y, x)}")
-
     # Switch them if count met
-    if countAround(grid, y, x) >= numToCount:
-        if y == 0 and x == 5:
-            print("switching")
-        return switch[grid[y][x]]
+    if grid[y][x] == "L" and countAround(grid, y, x) == numToCount:
+        return "#" 
+
+    if grid[y][x] == "#" and countAround(grid, y, x) >= numToCount:
+        return "L"
 
     # Otherwise keep the same
-    # print("not switch")
     return grid[y][x]
 
+def sumSeats(inp):
+    return sum([1 for y in inp for x in y if x == "#"])
+
+
+
 # This time, write tests based on filepaths
-inp = sys.stdin.read()
-pprint.pprint(parseInput(inp))
-print()
-pprint.pprint(updateGrid(parseInput(inp)))
+inp = parseInput(sys.stdin.read())
+
+newGrid = updateGrid(inp)
+
+while newGrid != inp:
+    inp = newGrid
+    newGrid = updateGrid(newGrid)
+
+print(sumSeats(inp))
+
+# pprint.pprint(parseInput(inp))
+# print()
+# pprint.pprint(updateGrid(parseInput(inp)))
 # print(countAround(parseInput(inp), 0, 5))
 
