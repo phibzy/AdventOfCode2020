@@ -19,7 +19,6 @@ def parseInput(inp):
 
 def updateGrid(grid):
     newGrid = [ [ updateSeat(grid,row,col) for col in range(len(grid[row])) ] for row in range(len(grid)) ]
-    newGrid = [ line for row in range(len(grid)) for line in [ updateSeat(grid,row,col) for col in range(len(grid[row])) ] ]
     return newGrid
 
 # Counts number of occupied seats around current seat
@@ -53,13 +52,24 @@ def updateSeat(grid, y, x):
     # confirm which count we want
     numToCount = [EMPTY_CHECK, OCCUPIED_CHECK][grid[y][x] == "#"]
 
+    if y == 0 and x == 5:
+        print(f"numToCount: {numToCount}, \
+                countAround: {countAround(grid, y, x)}")
+
     # Switch them if count met
     if countAround(grid, y, x) >= numToCount:
+        if y == 0 and x == 5:
+            print("switching")
         return switch[grid[y][x]]
 
     # Otherwise keep the same
+    # print("not switch")
     return grid[y][x]
 
 # This time, write tests based on filepaths
 inp = sys.stdin.read()
+pprint.pprint(parseInput(inp))
+print()
 pprint.pprint(updateGrid(parseInput(inp)))
+# print(countAround(parseInput(inp), 0, 5))
+
