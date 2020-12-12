@@ -166,11 +166,11 @@ def updateSeat2(grid, y, x):
 # This time, write tests based on filepaths
 inp = parseInput(sys.stdin.read())
 
-newGrid = updateGrid(inp)
+newGrid = updateGrid2(inp)
 
 while newGrid != inp:
     inp = newGrid
-    newGrid = updateGrid(newGrid)
+    newGrid = updateGrid2(newGrid)
 
 print(sumSeats(inp))
 
