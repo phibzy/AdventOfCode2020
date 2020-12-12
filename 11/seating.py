@@ -63,6 +63,87 @@ def updateSeat(grid, y, x):
 def sumSeats(inp):
     return sum([1 for y in inp for x in y if x == "#"])
 
+def updateGrid2(grid):
+    newGrid = [ [ updateSeat2(grid,row,col) for col in range(len(grid[row])) ] for row in range(len(grid)) ]
+    return newGrid
+
+# Counts number of occupied seats around current seat
+def countAround2(grid, y, x):
+    width  = len(grid[y])
+    height = len(grid)
+
+    numOccupied = 0
+
+    # zip - returns a 'zip object', an iterator of
+    # tuples basically. Stops when either of the two
+    # given iterators end.
+    # Tl;dr length of iterator determined by shortest of two iterators
+    # Look left
+    for i in range(x-1, -1, -1):
+        if grid[y][i] == "#":
+            numOccupied += 1
+            break
+
+    # Look right
+    for i in range(x+1, width):
+        if grid[y][i] == "#":
+            numOccupied += 1
+            break
+
+    # Look up
+    for i in range(y-1, -1, -1):
+        if grid[i][x] == "#":
+            numOccupied += 1
+            break
+
+    # Look down
+    for i in range(y+1, height):
+        if grid[i][x] == "#":
+            numOccupied += 1
+            break
+
+    # Upright
+    for i,j in zip(range(y-1, -1, -1), range(x+1, width)):
+        if grid[i][j] == "#":
+            numOccupied += 1
+            break
+
+    # Downright
+    for i,j in zip(range(y+1, height), range(x+1, width)):
+        if grid[i][j] == "#":
+            numOccupied += 1
+            break
+
+    # Downleft
+    for i,j in zip(range(y+1, height), range(x-1, -1, -1)):
+        if grid[i][j] == "#":
+            numOccupied += 1
+            break
+
+    # Upleft
+    for i,j in zip(range(y-1, -1, -1), range(x-1, -1, -1)):
+        if grid[i][j] == "#":
+            numOccupied += 1
+            break
+
+    return numOccupied
+
+def updateSeat2(grid, y, x):
+    # We don't care about the floor
+    if grid[y][x] == '.': return '.'
+    
+    # confirm which count we want
+    numToCount = [EMPTY_CHECK, OCCUPIED_CHECK + 1][grid[y][x] == "#"]
+
+    # Switch them if count met
+    if grid[y][x] == "L" and countAround2(grid, y, x) == numToCount:
+        return "#" 
+
+    if grid[y][x] == "#" and countAround2(grid, y, x) >= numToCount:
+        return "L"
+
+    # Otherwise keep the same
+    return grid[y][x]
 
 
 # This time, write tests based on filepaths
