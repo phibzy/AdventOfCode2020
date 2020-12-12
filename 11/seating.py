@@ -79,10 +79,13 @@ def countAround2(grid, y, x):
     # given iterators end.
     # Tl;dr length of iterator determined by shortest of two iterators
     # Look left
+    # Misread question oops
     for i in range(x-1, -1, -1):
         if grid[y][i] == "#":
             numOccupied += 1
             break
+
+        if grid[y][i] == "L": break
 
     # Look right
     for i in range(x+1, width):
@@ -90,11 +93,15 @@ def countAround2(grid, y, x):
             numOccupied += 1
             break
 
+        if grid[y][i] == "L": break
+
     # Look up
     for i in range(y-1, -1, -1):
         if grid[i][x] == "#":
             numOccupied += 1
             break
+
+        if grid[i][x] == "L": break
 
     # Look down
     for i in range(y+1, height):
@@ -102,11 +109,15 @@ def countAround2(grid, y, x):
             numOccupied += 1
             break
 
+        if grid[i][x] == "L": break
+
     # Upright
     for i,j in zip(range(y-1, -1, -1), range(x+1, width)):
         if grid[i][j] == "#":
             numOccupied += 1
             break
+
+        if grid[i][j] == "L": break
 
     # Downright
     for i,j in zip(range(y+1, height), range(x+1, width)):
@@ -114,17 +125,23 @@ def countAround2(grid, y, x):
             numOccupied += 1
             break
 
+        if grid[i][j] == "L": break
+
     # Downleft
     for i,j in zip(range(y+1, height), range(x-1, -1, -1)):
         if grid[i][j] == "#":
             numOccupied += 1
             break
 
+        if grid[i][j] == "L": break
+
     # Upleft
     for i,j in zip(range(y-1, -1, -1), range(x-1, -1, -1)):
         if grid[i][j] == "#":
             numOccupied += 1
             break
+
+        if grid[i][j] == "L": break
 
     return numOccupied
 

@@ -74,9 +74,20 @@ class testSeating(unittest.TestCase):
     def testSumSeats(self):
         self.assertEqual(sumSeats(self.parsedContents[6]), 37)
 
+    def testCountAround2(self):
+        self.assertEqual(countAround2(self.parsedContents[9], 0, 3), 0)
+
     def testUpdateSeat2(self):
         self.assertEqual(updateSeat2(self.parsedContents[8], 0, 2), "L")
         self.assertEqual(updateSeat2(self.parsedContents[8], 0, 3), "L")
         self.assertEqual(updateSeat2(self.parsedContents[8], 4, 0), "L")
         self.assertEqual(updateSeat2(self.parsedContents[8], 9, 4), "L")
+        self.assertEqual(updateSeat2(self.parsedContents[9], 0, 3), "#")
+
+    def testUpdateGrid2(self):
+        self.assertEqual(updateGrid2(self.parsedContents[7]), self.parsedContents[8])
+        self.assertEqual(updateGrid2(self.parsedContents[8]), self.parsedContents[9])
+        self.assertEqual(updateGrid2(self.parsedContents[9]), self.parsedContents[10])
+        self.assertEqual(updateGrid2(self.parsedContents[10]), self.parsedContents[11])
+        self.assertEqual(updateGrid2(self.parsedContents[11]), self.parsedContents[12])
 
