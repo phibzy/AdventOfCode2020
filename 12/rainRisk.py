@@ -105,11 +105,13 @@ def rotatePoint(wayP, rVal, i):
     # ERROR IS IN HERE
     # Rotating left once is same as rotating right 3 times
     elif (i == "L" and rVal == 1) or (i == "R" and rVal == 3):
-        wayP[0], wayP[1] = wayP[1]*-1, abs(wayP[0])
+        # When we rotate left, newXCoord = -Y and newYCoord = X
+        wayP[0], wayP[1] = wayP[1]*-1, wayP[0]
         
     # Rotating right once is same as rotating left 3 times 
     elif (i == "R" and rVal == 1) or (i == "L" and rVal == 3):
-        wayP[0], wayP[1] = abs(wayP[1]), wayP[0]*-1
+        # When we rotate right, newXCoord = Y and newYCoord = -X
+        wayP[0], wayP[1] = wayP[1], wayP[0]*-1
 
     # For 0 and 360 rotations we don't need to worry (none in input anyway)
     return wayP
