@@ -42,13 +42,14 @@ class testRain(unittest.TestCase):
 
 
         self.assertEqual(rotatePoint([1,1], 1, "R"), [1,-1])
-
         self.assertEqual(rotatePoint([1,-1], 1, "R"), [-1,-1])
         self.assertEqual(rotatePoint([-1,-1], 1, "R"), [-1,1])
-
         self.assertEqual(rotatePoint([-1,1], 1, "R"), [1, 1])
-
-        
         self.assertEqual(rotatePoint([10,4], 1, "R"), [4,-10])
         self.assertEqual(rotatePoint([4, -10], 1, "R"), [-10, -4])
         self.assertEqual(rotatePoint([-10,-4], 1, "R"), [-4,10])
+
+        self.assertEqual(rotatePoint([1,1], 1, "L"), [-1,1])
+        self.assertEqual(rotatePoint([-1,1], 1, "L"), [-1,-1])
+        self.assertEqual(rotatePoint([-1,-1], 1, "L"), [1,-1])
+        self.assertEqual(rotatePoint([1,-1], 1, "L"), [1, 1])
