@@ -10,6 +10,8 @@
 # N/S/E/W instructions don't change direction ship is facing
 # Only L/R changes direction of ship - only have values of 90/180/270
 
+from pathlib import Path
+
 def parseInput(inp):
     # For each line in input, grab the first character (a letter)
     # and the rest of the line as an int. Make a list of these command combos.
@@ -40,7 +42,8 @@ def manhattanDistance(inp):
             # we use a negative multiplier. Otherwise we use a positive one.
             # Mod result by number of directions so we have index of current
             # direction.
-            currentDirection += (val // TURN)*TURN_MULTIPLIER[i == 1] % NUM_DIRECTIONS
+            currentDirection = (val // TURN)*TURN_MULTIPLIER[i == "R"]
+            currentDirection %= NUM_DIRECTIONS
 
         elif i == "F":
             # Change dist origin based on current direction
@@ -53,5 +56,8 @@ def manhattanDistance(inp):
             axis, multiplier = D_MOD[i]
             distOrigin[axis] += multiplier*val
 
-    return sum(distOrigin) 
+    # Get absolute vals of coords, then sum together
+    return sum(map(abs, distOrigin)) 
 
+inp = parseInput(Path("./input/puzzle_input").read_text())
+print(manhattanDistance(inp))
