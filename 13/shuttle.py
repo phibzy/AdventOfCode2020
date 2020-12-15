@@ -60,5 +60,39 @@ def earliestTime(target, inp):
     # Return busID times the minutes we have to wait
     return busID*min2Wait
 
+def earliestOffsetTime(busList):
+    # Change x's into 1s, makes it way easier
+    busList = [ 1 if bus == "x" else bus for bus in busList ]
+
+    # Want to find some time t, such that:
+    # t % busList[0] == 0, t + 1 % busList[1] == 0, t + 2 % busList[2] == 0...
+    # all the way up to t + (n - 1) % busList[(n - 1)] == 0
+
+    # Brute Force method:
+    # Starting point is whatever our first bus number is
+    # I.e. its first multiple
+    i = busList[0]
+    while True:
+        b = 1
+        
+        while b < len(busList) and (i + b) % busList[b] == 0:
+            b += 1
+
+        # If we checked whole list, we found a number where condition holds!
+        if b == len(busList): break
+
+        # Increment by busList[0]s to make
+        # sure first condition holds
+        i += busList[0]
+
+    return i
+            
 inp = parseInput(Path('./input/puzzle_input').read_text())
-print(earliestTime(*inp))
+
+# For Pt. 1 answer
+# print(earliestTime(*inp))
+
+# For Pt. 2 answer
+print(inp[1])
+# print(earliestOffsetTime(inp[1]))
+

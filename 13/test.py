@@ -10,6 +10,7 @@
 import unittest
 from pathlib import Path
 from shuttle import parseInput, lowestMultiple, earliestTime
+from shuttle import earliestOffsetTime
 
 class testShuttle(unittest.TestCase):
 
@@ -27,3 +28,11 @@ class testShuttle(unittest.TestCase):
 
     def testEarliestTime(self):
         self.assertEqual(earliestTime(*self.testInput[0]), 295)
+
+    def testEarliestOffsetTime(self):
+        self.assertEqual(earliestOffsetTime([17, "x", 13, 19]), 3417)
+        self.assertEqual(earliestOffsetTime([67, 7, 59, 61]), 754018)
+        self.assertEqual(earliestOffsetTime([67, "x", 7, 59, 61]), 779210)
+        self.assertEqual(earliestOffsetTime([67, 7, "x", 59, 61]), 1261476)
+        self.assertEqual(earliestOffsetTime([1789, 37, 47, 1889]), 1202161486)
+
