@@ -68,31 +68,43 @@ def earliestOffsetTime(busList):
     # t % busList[0] == 0, t + 1 % busList[1] == 0, t + 2 % busList[2] == 0...
     # all the way up to t + (n - 1) % busList[(n - 1)] == 0
 
-    # Brute Force method:
-    # Starting point is whatever our first bus number is
-    # I.e. its first multiple
-    i = busList[0]
-    while True:
-        b = 1
+    # First, find a number i such that i % x[0] == 0, i + 1 % x[1] == 0
+    # Once we have these numbers, we find the LCM of x[1] and x[0]
+    # The reason for this is that we can maintain the above relationship
+    # with these two numbers if we increase them by the minimum number
+    # that will maintain this relationsip. I.e. the smallest increment
+    # that is a multiple of both numbers
+    # At the start this is just the first number of the sequence
+    lcm = busList[0]
+
+    # Our starting timestamp
+    curr = busList[0]
+
+    # Count of distance from first timestamp
+    count = 1
+    
+    # Start search from 2nd element, since first element is starting point
+    for bus in busList[1:]:
+        # Keep searching for timestamp where condition holds
+        while ((curr + count) % bus != 0):
+            # We increment timestamp by LCM, because we want to maintain our
+            # existing relationships
+            curr += lcm
         
-        while b < len(busList) and (i + b) % busList[b] == 0:
-            b += 1
+        # We update LCM by multiplying with current busID
+        # This means we can maintain all the existing relationships
+        # while also maintaining the newly discovered one
+        lcm*= bus
+        count += 1
+    
+    # Return the timestamp
+    return curr 
 
-        # If we checked whole list, we found a number where condition holds!
-        if b == len(busList): break
-
-        # Increment by busList[0]s to make
-        # sure first condition holds
-        i += busList[0]
-
-    return i
-            
 inp = parseInput(Path('./input/puzzle_input').read_text())
 
 # For Pt. 1 answer
 # print(earliestTime(*inp))
 
 # For Pt. 2 answer
-print(inp[1])
-# print(earliestOffsetTime(inp[1]))
+print(earliestOffsetTime(inp[1]))
 
