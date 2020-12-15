@@ -49,13 +49,13 @@ def lowestMultiple(target, num):
 
 def earliestTime(target, inp):
     # find earliest time + its index
-    eTs = [ (i, lowestMultiple(target, bus)) for i, bus in enumerate(inp) ]
-    eT = min(eTs, key=lambda x: x[1])
+    eTs = [ lowestMultiple(target, bus) for bus in inp ] 
+    eT = min(eTs)
     
-    # Get ID of bus with earliest time
-    # using the index of min element in eTs
-    busID = inp[eT[0]]
-    min2Wait = eT[1] - target
+    # BusID of bus with earliest time will be element
+    # in original input with same index as minimum of eTs
+    busID = inp[eTs.index(eT)]
+    min2Wait = eT - target
 
     # Return busID times the minutes we have to wait
     return busID*min2Wait
