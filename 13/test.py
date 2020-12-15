@@ -9,7 +9,7 @@
 
 import unittest
 from pathlib import Path
-from shuttle import parseInput
+from shuttle import parseInput, lowestMultiple, earliestTime
 
 class testShuttle(unittest.TestCase):
 
@@ -19,3 +19,11 @@ class testShuttle(unittest.TestCase):
     def testParse(self):
         self.assertEqual(self.testInput[0], (939, [7,13,"x","x",59,"x",31,19]))
 
+    def testLowestMultiple(self):
+        self.assertEqual(lowestMultiple(939, 1), 939)
+        self.assertEqual(lowestMultiple(939, 7), 945)
+        self.assertEqual(lowestMultiple(939, 59), 944)
+        self.assertEqual(lowestMultiple(939, "x"), float('inf'))
+
+    def testEarliestTime(self):
+        self.assertEqual(earliestTime(*self.testInput[0]), 295)
