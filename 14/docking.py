@@ -122,19 +122,25 @@ def sumPt2(inp):
 
     return sum(memory.values())
 
+# Function for getting all sum combinations
 def genCombos(inp):
     if not inp: return []
 
+    # First combo is always the current number by itself
     output = [ inp[0] ]
 
+    # Grab the rest of the list and find 
+    # all the possible combos in that sublist 
     rest = inp[1:]
-
     restCombos = genCombos(rest)
-    # print(restCombos)
-    
+
+    # Then, add all those combos (i.e. all the sums
+    # that don't include the current element), then 
+    # create a new version of each sum that includes current element
     for val in restCombos:
         output.append(inp[0] + val)
 
+    # Append all the sum combos not featuring current element
     output += restCombos
 
     return output
