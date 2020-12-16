@@ -100,7 +100,7 @@ def sumPt2(inp):
 
             # Then XOR with xMask to set all X bits to 0 initially
             address ^= int(xMask, 2)
-            # print(bin(address)[2:])
+            print(bin(address)[2:])
 
             # We can also set our initial memory address
             memory[address] = val
