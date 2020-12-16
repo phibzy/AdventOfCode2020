@@ -89,37 +89,36 @@ def sumPt2(inp):
 
         # keep track of indices of "floating" bits
         # get their power of 2. We do 35 - i since highest
-        # print(xMask)
-        # largest power of 2 is 35 and most sig digit is furthest left
+        # power of 2 is 35 and most sig digit is furthest left
         floating = [ 2**(35-i) for i,v in enumerate(xMask1) if v == "1" ]
 
         for address, val in commands:
-            # print(f"address: {bin(address)[2:]}")
-            # print(f"orMask: {bin(orMask)[2:]}, andMask: {bin(andMask)[2:]}")
-            # print(bin(address)[2:])
-            # First up, OR with or mask to put in all the 1s
+            # First up, OR with ormask to put in all the 1s
             # That are missing
             address |= orMask
-            # print(bin(address)[2:])
-
-
-            # print(f"address: {bin(address)[2:]}")
-            # print(f"xMask1: {xMask1}")
-            # print(f"xMask1: {bin(int(xMask1, 2))[2:]}")
-            # Then AND with xMask to set all X bits to 0 initially
+            # Then AND with xMask2 to set all X bits to 0 initially
+            # xMask2 is just a mask where all the X bits
+            # are set to 0 and the others are set to 1
             address &= int(xMask2, 2)
-            # print(bin(address)[2:])
 
             # We can also set our initial memory address
             memory[address] = val
 
-            # print(floating)
-            # s for sums
+            # Changing a binary digit is equivalent to
+            # adding/subbing the power of 2
+            # corresponding to that digit.
+
+            # Therefore, we can get all the memory address
+            # combinations by finding all the sum combinations for every
+            # power of 2 corresponding to the Xs
+            # Once that's done we just add each sum
+            # to the base memory address
+
+            # s stands for sums
             for s in genCombos(floating):
                 nextA = address + s
                 memory[nextA] = val
 
-            # print(memory)
 
     return sum(memory.values())
 
