@@ -43,7 +43,8 @@ def parseInput(inp):
         # as a binary string into an integer
         orMask   = int(re.sub("X", "0", g[0]), 2)
         andMask  = int(re.sub("X", "1", g[0]), 2)
-        xMask    = ''.join([ "1" if c == "X" else "0" for c in g[0] ])
+        xMask1    = ''.join([ "1" if c == "X" else "0" for c in g[0] ])
+        xMask2    = ''.join([ "0" if c == "X" else "1" for c in g[0] ])
 
         # For each remaining line in the group, we want to grab
         # the number between the square brackets (memory address) and
@@ -53,8 +54,9 @@ def parseInput(inp):
         # Then add the group data to the output list,
         # since puzzle input has many groups like this with
         # different masks
-        parsed.append([xMask, orMask, andMask, commands])
+        parsed.append([xMask1, xMask2, orMask, andMask, commands])
         # print(f"og xmask: {xMask}")
+        # print(xMask)
 
     return parsed
 
@@ -63,7 +65,7 @@ def sumMemory(inp):
     # Just have address 0 set to 0 for starters
     memory = {0: 0}
 
-    for _, orMask, andMask, commands in inp:
+    for _, _, orMask, andMask, commands in inp:
 
         for address, val in commands:
             # First, OR with the ormask to add in 
@@ -83,23 +85,28 @@ def sumMemory(inp):
 def sumPt2(inp):
     memory = {0:0}
 
-    for xMask, orMask, _, commands in inp:
+    for xMask1, xMask2, orMask, andMask, commands in inp:
 
         # keep track of indices of "floating" bits
         # get their power of 2. We do 35 - i since highest
         # print(xMask)
         # power of 2 is 35 and most sig digit is furthest left
-        floating = [ 2**(35-i) for i,v in enumerate(xMask) if v == "1" ]
+        floating = [ 2**(35-i) for i,v in enumerate(xMask1) if v == "1" ]
 
         for address, val in commands:
+            print(f"orMask: {bin(orMask)[2:]}, andMask: {bin(andMask)[2:]}")
             # print(bin(address)[2:])
             # First up, OR with or mask to put in all the 1s
             # That are missing
             address |= orMask
             # print(bin(address)[2:])
 
+
+            print(f"address: {bin(address)[2:]}")
+            print(f"xMask1: {xMask1}")
+            print(f"xMask1: {bin(int(xMask1, 2))[2:]}")
             # Then XOR with xMask to set all X bits to 0 initially
-            address ^= int(xMask, 2)
+            address ^= int(xMask2, 2)
             print(bin(address)[2:])
 
             # We can also set our initial memory address
@@ -140,4 +147,4 @@ inp = parseInput(Path('./input/test_input2').read_text())
 # print(sumMemory(inp))
 
 # Pt. 2
-# print(sumPt2(inp))
+print(sumPt2(inp))
