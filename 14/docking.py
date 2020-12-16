@@ -32,6 +32,8 @@ def parseInput(inp):
     parsed = list()
 
     # For each group of masks and instructions
+    # print(groups)
+    # print(''.rjust(30, "#"))
     for group in groups:
         # Separate mask and instructions
         g = group.strip().split("\n")
@@ -41,6 +43,7 @@ def parseInput(inp):
         # as a binary string into an integer
         orMask   = int(re.sub("X", "0", g[0]), 2)
         andMask  = int(re.sub("X", "1", g[0]), 2)
+        xMask    = ''.join([ "1" if c == "X" else "0" for c in g[0] ])
 
         # For each remaining line in the group, we want to grab
         # the number between the square brackets (memory address) and
@@ -50,7 +53,8 @@ def parseInput(inp):
         # Then add the group data to the output list,
         # since puzzle input has many groups like this with
         # different masks
-        parsed.append([orMask, andMask, commands])
+        parsed.append([xMask, orMask, andMask, commands])
+        # print(f"og xmask: {xMask}")
 
     return parsed
 
@@ -59,7 +63,7 @@ def sumMemory(inp):
     # Just have address 0 set to 0 for starters
     memory = {0: 0}
 
-    for orMask, andMask, commands in inp:
+    for _, orMask, andMask, commands in inp:
 
         for address, val in commands:
             # First, OR with the ormask to add in 
@@ -76,7 +80,64 @@ def sumMemory(inp):
     # Return the sum of all the values in memory
     return sum(memory.values())
 
-inp = parseInput(Path('./input/puzzle_input').read_text())
+def sumPt2(inp):
+    memory = {0:0}
+
+    for xMask, orMask, _, commands in inp:
+
+        # keep track of indices of "floating" bits
+        # get their power of 2. We do 35 - i since highest
+        # print(xMask)
+        # power of 2 is 35 and most sig digit is furthest left
+        floating = [ 2**(35-i) for i,v in enumerate(xMask) if v == "1" ]
+
+        for address, val in commands:
+            # print(bin(address)[2:])
+            # First up, OR with or mask to put in all the 1s
+            # That are missing
+            address |= orMask
+            # print(bin(address)[2:])
+
+            # Then XOR with xMask to set all X bits to 0 initially
+            address ^= int(xMask, 2)
+            # print(bin(address)[2:])
+
+            # We can also set our initial memory address
+            memory[address] = val
+
+            print(floating)
+            # s for sums
+            for s in genCombos(floating):
+                nextA = address + s
+                memory[nextA] = val
+
+            print(memory)
+
+    return sum(memory.values())
+
+def genCombos(inp):
+    if not inp: return []
+
+    output = [ inp[0] ]
+
+    rest = inp[1:]
+
+    restCombos = genCombos(rest)
+    # print(restCombos)
+    
+    for val in restCombos:
+        output.append(inp[0] + val)
+
+    output += restCombos
+
+    return output
+
+# inp = parseInput(Path('./input/puzzle_input').read_text())
+inp = parseInput(Path('./input/test_input2').read_text())
+# print(inp)
 
 # Pt. 1
-print(sumMemory(inp))
+# print(sumMemory(inp))
+
+# Pt. 2
+# print(sumPt2(inp))
