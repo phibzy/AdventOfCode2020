@@ -90,11 +90,12 @@ def sumPt2(inp):
         # keep track of indices of "floating" bits
         # get their power of 2. We do 35 - i since highest
         # print(xMask)
-        # power of 2 is 35 and most sig digit is furthest left
+        # largest power of 2 is 35 and most sig digit is furthest left
         floating = [ 2**(35-i) for i,v in enumerate(xMask1) if v == "1" ]
 
         for address, val in commands:
-            print(f"orMask: {bin(orMask)[2:]}, andMask: {bin(andMask)[2:]}")
+            # print(f"address: {bin(address)[2:]}")
+            # print(f"orMask: {bin(orMask)[2:]}, andMask: {bin(andMask)[2:]}")
             # print(bin(address)[2:])
             # First up, OR with or mask to put in all the 1s
             # That are missing
@@ -102,23 +103,23 @@ def sumPt2(inp):
             # print(bin(address)[2:])
 
 
-            print(f"address: {bin(address)[2:]}")
-            print(f"xMask1: {xMask1}")
-            print(f"xMask1: {bin(int(xMask1, 2))[2:]}")
-            # Then XOR with xMask to set all X bits to 0 initially
-            address ^= int(xMask2, 2)
-            print(bin(address)[2:])
+            # print(f"address: {bin(address)[2:]}")
+            # print(f"xMask1: {xMask1}")
+            # print(f"xMask1: {bin(int(xMask1, 2))[2:]}")
+            # Then AND with xMask to set all X bits to 0 initially
+            address &= int(xMask2, 2)
+            # print(bin(address)[2:])
 
             # We can also set our initial memory address
             memory[address] = val
 
-            print(floating)
+            # print(floating)
             # s for sums
             for s in genCombos(floating):
                 nextA = address + s
                 memory[nextA] = val
 
-            print(memory)
+            # print(memory)
 
     return sum(memory.values())
 
@@ -139,8 +140,8 @@ def genCombos(inp):
 
     return output
 
-# inp = parseInput(Path('./input/puzzle_input').read_text())
-inp = parseInput(Path('./input/test_input2').read_text())
+inp = parseInput(Path('./input/puzzle_input').read_text())
+# inp = parseInput(Path('./input/test_input2').read_text())
 # print(inp)
 
 # Pt. 1
