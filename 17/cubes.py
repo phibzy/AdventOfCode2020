@@ -109,7 +109,12 @@ def cycle(inp):
                 # pprint.pprint(newInp)
 
                 # print(f"val: {newInp[z][y][x]}")
+    
+    print("".rjust(30, '$'))
+    pprint.pprint(newInp)
 
+    print("".rjust(30, '$'))
+    print("".rjust(30, '$'))
     # Expand newInp based on flags
     # Use new list comprehensions for each row/plane this time ;)
     expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
@@ -118,12 +123,30 @@ def cycle(inp):
 
 # Expand padding if we have new values in original padding
 def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
+    
+    print(f"topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
+
+    print()
+    pprint.pprint(newInp)
+
     # First handle columns
     if leftCol or rightCol:
         for plane in newInp:
-            for row in plane:
-                if leftCol: row.insert(0, '.')
-                if rightCol: row.append('.' )
+            print("".rjust(30, "~"))
+            print("Plane before:")
+            pprint.pprint(plane)
+            print()
+
+
+            for row in range(len(plane)):
+                if leftCol: plane[row].insert(0, '.')
+                if rightCol: plane[row].append('.' )
+
+            print("Plane after:")
+            pprint.pprint(plane)
+            print()
+            print("".rjust(30, "~"))
+
 
     # Then rows
     if topRow or bottomRow:
@@ -137,6 +160,11 @@ def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightC
 
     if bottomPlane:
         newInp.append([ [ "."  for col in row ] for row in newInp[0] ])
+
+    print()
+    print("".rjust(30, "~"))
+    print()
+    pprint.pprint(newInp)
 
 
 def updateCube(inp, z, y, x, zLength, yLength, xLength):
@@ -163,26 +191,26 @@ def updateCube(inp, z, y, x, zLength, yLength, xLength):
                 # Don't count current cube as neighbour!
                 if (z,y,x) == (nZ, nY, nX): continue
 
-                print(''.rjust(30, "~"))
-                print(f"zBoundLow {zBoundLow}, zBoundHi {zBoundHi}")
-                print(f"yBoundLow {yBoundLow}, yBoundHi {yBoundHi}")
-                print(f"xBoundLow {xBoundLow}, xBoundHi {xBoundHi}")
-                print()
+                # print(''.rjust(30, "~"))
+                # print(f"zBoundLow {zBoundLow}, zBoundHi {zBoundHi}")
+                # print(f"yBoundLow {yBoundLow}, yBoundHi {yBoundHi}")
+                # print(f"xBoundLow {xBoundLow}, xBoundHi {xBoundHi}")
+                # print()
 
-                print(f"z {z}, nZ {nZ}")
-                print(f"y {y}, nY {nY}")
-                print(f"x {x}, nX {nX}")
+                # print(f"z {z}, nZ {nZ}")
+                # print(f"y {y}, nY {nY}")
+                # print(f"x {x}, nX {nX}")
 
-                print()
+                # print()
 
-                pprint.pprint(inp)
+                # pprint.pprint(inp)
 
                 # increment count if neighbour is active
                 activeCount += (inp[nZ][nY][nX] == "#")
                 
-                print(''.rjust(30, "~"))
-                print()
-                print()
+                # print(''.rjust(30, "~"))
+                # print()
+                # print()
                 
                 # early exit if too many active neighbours
                 if activeCount > 3: return "."
