@@ -7,17 +7,21 @@
 
 """
 
+from copy import deepcopy
 from pathlib import Path
 import pprint
 import logging
 import sys
+import pdb
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(msg)s")
+
+
+# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(msg)s")
 
 # Create representation of cube
 # Because this cube can keep growing,
 # we'll add extra rows/columns/levels around the perimeter
-# (2 cols, 2 rows, 2 levels) to check if it needs extending
+# (2 cols, 2 rows, 2 levels) to check if it needs Extending
 
 # Have something to check if extra plane/rows/cols were added
 
@@ -58,20 +62,37 @@ def cycle(inp):
 
     # Make copy of current space
     # since we're updating all cubes simultaneously
-    newInp = inp.copy()
+    # Do deep copy since it's a 3D list
+    newInp = deepcopy(inp)
 
     # Keeping track of max dimensions
     zLength = len(inp)
     yLength = len(inp[0])
     xLength = len(inp[0][0])
 
+    # pprint.pprint(inp)
+    pprint.pprint(newInp)
+
     # Here we go
     for z in range(zLength):
         for y in range(yLength):
             for x in range(xLength):
+                # print()
+                # print("".rjust(20, "~"))
+                # print(z, y, x)
+                # print()
+
+                if z == 1 and y == 4 and x == 2:
+                    print("".rjust(20, "~"))
+                    print(newInp[z][y][x])
+                    
 
                 # Update new space based on current one 
                 newInp[z][y][x] = updateCube(inp, z, y, x, zLength, yLength, xLength)
+
+                if z == 1 and y == 4 and x == 2:
+                    print(newInp[z][y][x])
+                    print("".rjust(20, "~"))
 
                 # if we have a new active case
                 # in the padding, set flags for which parts
@@ -97,14 +118,20 @@ def cycle(inp):
                     elif x == xLength - 1:
                         rightCol = True
 
+                # pprint.pprint(newInp)
+
+                # print(f"val: {newInp[z][y][x]}")
+
     # Expand newInp based on flags
-    # pprint.pprint(newInp)        
+    pprint.pprint(newInp)        
+    # print(activeCount)
     return (newInp, activeCount)
 
 
 def updateCube(inp, z, y, x, zLength, yLength, xLength):
     active = (inp[z][y][x] == "#")
-    pprint.pprint(inp)
+    # pprint.pprint(inp)
+    # print(active)
 
     # in both cases, if we have more than
     # three active neighbours we can do an early exit
@@ -131,12 +158,10 @@ def updateCube(inp, z, y, x, zLength, yLength, xLength):
                 # early exit if too many active neighbours
                 if activeCount > 3: return "."
 
-    # print(f"activeCount: {activeCount}")
-
     if active and (activeCount == 2 or activeCount == 3):
         return "#"
 
-    elif not active and (activeCount == 3):
+    elif (not active) and (activeCount == 3):
         return "#"
 
     return "."
@@ -155,5 +180,6 @@ Notes:
 
 # inp = parseSlice(Path("./input/puzzle_input").read_text())
 inp = parseSlice(Path("./input/test_input").read_text())
-# cycle(inp)
-# logging.debug("POOPOO")
+cycle(inp)
+# print("".rjust(20, "~"))
+# pprint.pprint(inp)
