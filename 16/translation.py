@@ -115,6 +115,8 @@ def getErrorRateN(fields, tickets):
 # Think of it like a topological sort-like problem
 
 # Getting rid of invalid tickets
+# TC: O(T*F^2) - Worst case we have to check all fields of each
+#                ticket against every possible field
 def validTix(fields, tickets):
     tikNum = 0
 
@@ -140,6 +142,8 @@ def validTix(fields, tickets):
 
     return tickets
 
+# TC: O(T*F^2) - We check every column (field) of every ticket,
+# and compare with each field rules
 def trimSets(fieldInfo, pSets, tickets):
     # Check each column, remove all fields its set that aren't valid
     for col in range(len(tickets[0])):
@@ -156,6 +160,7 @@ def trimSets(fieldInfo, pSets, tickets):
 
     return pSets
 
+# TC: O(T*F^2) - where T is number of tickets, F number of fields
 def pt2(inp):
     # We don't need the all encompassing ranges we used before
     fieldInfo, _, _, myTicket, otherTickets = inp
@@ -185,6 +190,11 @@ def pt2(inp):
     return currentProduct
 
 
+# TC: O(F^2) - Have to iterate through whole dict to remove each
+# field possibility on each pass. We make F passes.
+
+# Representing possibilities as adj matrix instead of dict
+# would improve TC
 def topoSort(pSets):
     field2Col = dict()
     # Create a queue of all indices with set length 1
