@@ -111,9 +111,32 @@ def cycle(inp):
                 # print(f"val: {newInp[z][y][x]}")
 
     # Expand newInp based on flags
-    # pprint.pprint(newInp)        
-    # print(activeCount)
+    # Use new list comprehensions for each row/plane this time ;)
+    expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
+    # pprint.pprint(newInp)
+
     return (newInp, activeCount)
+
+def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
+    # First handle columns
+    if leftCol or rightCol:
+        for plane in newInp:
+            for row in plane:
+                if leftCol: row.insert(0, '.')
+                if rightCol: row.append('.' )
+
+    # Then rows
+    if topRow or bottomRow:
+        for plane in newInp:
+            if topRow: plane.insert(0, [ '.' for _ in range(len(plane[0])) ])
+            if bottomRow: plane.append([ '.' for _ in range(len(plane[0])) ])
+
+    # Then planes
+    if topPlane:
+        newInp.insert(0, [ [ "."  for col in row ] for row in newInp[0] ])
+
+    if bottomPlane:
+        newInp.append([ [ "."  for col in row ] for row in newInp[0] ])
 
 
 def updateCube(inp, z, y, x, zLength, yLength, xLength):
@@ -153,6 +176,14 @@ def updateCube(inp, z, y, x, zLength, yLength, xLength):
         return "#"
 
     return "."
+
+# Assumes at least 1 cycle will be run
+def runCycles(inp, numCycles):
+    
+    for _ in range(numCyles):
+        inp, numActive = cycle(inp)
+
+    return numActive
 
 """
 Notes:
