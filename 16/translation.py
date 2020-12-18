@@ -9,6 +9,7 @@
 
 import re
 from pathlib import Path
+from collections import deque
 
 # Split on 2\n's
 # For first group, want to grab name and ranges and place
@@ -139,20 +140,80 @@ def validTix(fields, tickets):
 
     return tickets
 
+def trimSets(fieldInfo, pSets, tickets):
+    # Check each column, remove all fields its set that aren't valid
+    for col in range(len(tickets[0])):
+
+        for row in range(len(tickets)):
+
+            # If invalid result, remove the field possibility
+            # for that column
+            for field in fieldInfo:
+                ranges = fieldInfo[field]
+                
+                if not isValid(*ranges, tickets[row][col]) and field in pSets[col]:
+                    pSets[col].remove(field)
+
+    return pSets
+
 def pt2(inp):
     # We don't need the all encompassing ranges we used before
     fieldInfo, _, _, myTicket, otherTickets = inp
 
     pSets = { x: set(fieldInfo.keys()) for x in range(len(myTicket)) }
 
+    # Get rid of all invalid tickets first up
+    # Then include our own ticket in deduction process
+    tickets = validTix(fieldInfo, otherTickets) + [ myTicket ]
+
+    # Trim our pSets as well
+    pSets = trimSets(fieldInfo, pSets, tickets)
+
+    # Topological sort time
+    fieldMapping = topoSort(pSets)
+
+    # We have column mappings, now we'll find every field starting
+    # with 'departure' and multiply them together
+    currentProduct = 1
+
+    # If the field matches, get the columnIndex it
+    # maps to. Then multiply with current product
+    for field in fieldMapping:
+        if re.match("^departure", field):
+            currentProduct *= myTicket[fieldMapping[field]]
+
+    return currentProduct
 
 
-    # Remember to include own ticket in deduction
-    # for ticket in otherTickets:
+def topoSort(pSets):
+    field2Col = dict()
+    # Create a queue of all indices with set length 1
+    # I.e. those columns with only one possibility for their field
+    while pSets:
+        q = deque()
 
-        # for col in range(len(myTicket)):
+        for i in pSets:
+            # Append to q if set length is 1
+            if len(pSets[i]) == 1:
+                q.append(i)
 
+        # Process the q
+        while q:
+            # Gets the only element in set by abusing unpacking lol
+            colIndex = q.pop()
+            nextField,  = pSets[colIndex]
 
+            # Remove this field from all the other sets
+            for s in pSets.values():
+                if nextField in s:
+                    s.remove(nextField)
+
+            # Keep track of field -> index mapping, 
+            # then remove column from pSets
+            field2Col[nextField] = colIndex
+            del pSets[colIndex]
+
+    return field2Col
 
 inp = parseInput(Path('./input/puzzle_input').read_text())
 
@@ -167,6 +228,10 @@ inp = parseInput(Path('./input/puzzle_input').read_text())
 # field is valid for only a single definition, yet
 # it's the same one as another field with a single
 # valid definition.
+
+# My part 2 solution also assumes there is at least
+# one column at the start which only has one possible
+# field.
 
 # Pt. 2
 print(pt2(inp))

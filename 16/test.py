@@ -10,7 +10,7 @@
 import unittest
 from pathlib import Path
 from translation import parseInput, isValid, getErrorRate, getErrorRateN
-from translation import validTix, pt2
+from translation import validTix, pt2, trimSets, topoSort
 
 class test(unittest.TestCase):
 
@@ -44,3 +44,17 @@ class test(unittest.TestCase):
     def testValidTix(self):
         self.assertEqual(validTix(self.testInput[0][0], self.testInput[0][-1]), [[7,3,47]])
         self.assertEqual(validTix(self.testInput[1][0], self.testInput[1][-1]), [[3,9,18],[15,1,5],[5,14,9]])
+
+    def testTrim(self):
+        fields = self.testInput[0][0]
+        myTicket = self.testInput[0][3]
+        fields2 = {"class": [[0,1],[4,19]], "row": [[0,5],[8,19]], "seat": [[0,13],[16,19]]}
+
+        self.assertEqual(trimSets(fields, { x: set(fields.keys()) for x in range(len(myTicket)) }, [[7,1,14],[7,3,47]]), { 0: {"class", "row"}, 1: {"class"}, 2: {"seat"} })
+        self.assertEqual(trimSets(fields2, { x: set(fields2.keys()) for x in range(len(myTicket)) }, [[11,12,13],[3,9,18],[15,1,5],[5,14,9]]), { 0: {"row"}, 1: {"class", "row"}, 2: {"class", "row", "seat"} })
+        
+    def topoSort(self):
+        self.assertEqual(topoSort({ 0: {"row"}, 1: {"class", "row"}, 2: {"class", "row", "seat"} }), {"row": 0,
+            "class": 1, "seat": 2})
+        self.assertEqual(topoSort({ 0: {"class", "row"}, 1: {"class"}, 2: {"seat"} }), {"row": 0,
+            "class": 1, "seat": 2})
