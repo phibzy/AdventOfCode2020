@@ -26,6 +26,7 @@ import pdb
 # Have something to check if extra plane/rows/cols were added
 
 # Get our starting slice and turn it into 3d space 
+# Errors were due to not making proper copies at start, woopsies
 def parseSlice(inp):
     # Our slice is going to be a 2d list 
     sl = list()
@@ -38,7 +39,7 @@ def parseSlice(inp):
 
     # Add in the row padding 
     rPadding = [ '.' for _ in range(len(sl[0])) ]
-    sl = [rPadding] + sl + [rPadding]
+    sl = [rPadding] + sl + [rPadding.copy()]
 
     # Create our 3d spaaaaace
     space = list()
@@ -49,7 +50,7 @@ def parseSlice(inp):
     # Pad our 2d slice with slices on top and bottom
     space.append(padSlice) 
     space.append(sl) 
-    space.append(padSlice) 
+    space.append(padSlice.copy()) 
 
     return space
 
@@ -71,28 +72,15 @@ def cycle(inp):
     xLength = len(inp[0][0])
 
     # pprint.pprint(inp)
-    pprint.pprint(newInp)
+    # pprint.pprint(newInp)
 
     # Here we go
     for z in range(zLength):
         for y in range(yLength):
             for x in range(xLength):
-                # print()
-                # print("".rjust(20, "~"))
-                # print(z, y, x)
-                # print()
 
-                if z == 1 and y == 4 and x == 2:
-                    print("".rjust(20, "~"))
-                    print(newInp[z][y][x])
-                    
-
-                # Update new space based on current one 
+                # Update new cube based on current one 
                 newInp[z][y][x] = updateCube(inp, z, y, x, zLength, yLength, xLength)
-
-                if z == 1 and y == 4 and x == 2:
-                    print(newInp[z][y][x])
-                    print("".rjust(20, "~"))
 
                 # if we have a new active case
                 # in the padding, set flags for which parts
@@ -123,7 +111,7 @@ def cycle(inp):
                 # print(f"val: {newInp[z][y][x]}")
 
     # Expand newInp based on flags
-    pprint.pprint(newInp)        
+    # pprint.pprint(newInp)        
     # print(activeCount)
     return (newInp, activeCount)
 
