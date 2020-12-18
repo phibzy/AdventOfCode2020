@@ -45,5 +45,17 @@ def parseSlice(inp):
 
     return space
 
+"""
+Notes:
+    - Expand space at end of cycle if necessary
+        - Have flags for left/right row/col/plane 
+
+    - Counting neighbours
+        - Check whether active/inactive to find max
+          value, helps with early exit
+
+
+"""
+
 inp = Path("./input/puzzle_input").read_text()
 parseSlice(inp)
