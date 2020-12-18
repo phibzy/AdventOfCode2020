@@ -9,7 +9,7 @@
 """
 
 import unittest
-from cubes import parseSlice, cycle, updateCube
+from cubes import parseSlice, cycle, updateCube, runCycles
 from pathlib import Path
 
 class testCube(unittest.TestCase):
@@ -98,3 +98,7 @@ class testCube(unittest.TestCase):
         self.assertEqual(updateCube(self.testInput[0], 0, 3, 0, 3, 5, 5), ".")
         self.assertEqual(updateCube(self.testInput[0], 1, 0, 2, 3, 5, 5), ".")
 
+    def testRunCycles(self):
+        self.assertEqual(runCycles(self.testInput[0], 1), 11)
+        self.assertEqual(runCycles(self.testInput[0], 2), 21)
+        self.assertEqual(runCycles(self.testInput[0], 3), 38)

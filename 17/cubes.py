@@ -113,10 +113,10 @@ def cycle(inp):
     # Expand newInp based on flags
     # Use new list comprehensions for each row/plane this time ;)
     expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
-    # pprint.pprint(newInp)
 
     return (newInp, activeCount)
 
+# Expand padding if we have new values in original padding
 def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
     # First handle columns
     if leftCol or rightCol:
@@ -163,8 +163,26 @@ def updateCube(inp, z, y, x, zLength, yLength, xLength):
                 # Don't count current cube as neighbour!
                 if (z,y,x) == (nZ, nY, nX): continue
 
+                print(''.rjust(30, "~"))
+                print(f"zBoundLow {zBoundLow}, zBoundHi {zBoundHi}")
+                print(f"yBoundLow {yBoundLow}, yBoundHi {yBoundHi}")
+                print(f"xBoundLow {xBoundLow}, xBoundHi {xBoundHi}")
+                print()
+
+                print(f"z {z}, nZ {nZ}")
+                print(f"y {y}, nY {nY}")
+                print(f"x {x}, nX {nX}")
+
+                print()
+
+                pprint.pprint(inp)
+
                 # increment count if neighbour is active
                 activeCount += (inp[nZ][nY][nX] == "#")
+                
+                print(''.rjust(30, "~"))
+                print()
+                print()
                 
                 # early exit if too many active neighbours
                 if activeCount > 3: return "."
@@ -180,7 +198,7 @@ def updateCube(inp, z, y, x, zLength, yLength, xLength):
 # Assumes at least 1 cycle will be run
 def runCycles(inp, numCycles):
     
-    for _ in range(numCyles):
+    for _ in range(numCycles):
         inp, numActive = cycle(inp)
 
     return numActive
@@ -198,7 +216,5 @@ Notes:
 """
 
 # inp = parseSlice(Path("./input/puzzle_input").read_text())
-inp = parseSlice(Path("./input/test_input").read_text())
-cycle(inp)
-# print("".rjust(20, "~"))
-# pprint.pprint(inp)
+inp = parseSlice(Path("./input/puzzle_input").read_text())
+print(runCycles(inp, 6))
