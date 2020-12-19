@@ -43,6 +43,12 @@ def parseInput(inp):
     return wSpace
 
 def cycle(inp):
+    # print()
+    # print("Before cycle")
+    # print("".rjust(30, "~"))
+    # pprint(inp)
+
+
     # flags for end if we need to expand
     topRow = bottomRow = leftCol = rightCol = topPlane = bottomPlane = topSpace = bottomSpace = False
     
@@ -108,13 +114,13 @@ def cycle(inp):
     
     # print("".rjust(30, '$'))
     # pprint.pprint(newInp)
-    print(activeCount)
+    # print(activeCount)
 
     # print("".rjust(30, '$'))
     # print("".rjust(30, '$'))
     # Expand newInp based on flags
     # Use new list comprehensions for each row/plane this time ;)
-    expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
+    newInp = expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
 
     # pprint.pprint(newInp)
 
@@ -163,17 +169,18 @@ def updateSpace(inp, w, z, y, x, wLength, zLength, yLength, xLength):
 
 # One of these expansions isn't working properly
 def expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
-    # print(f"topSpace: {topSpace}, bottomSpace: {bottomSpace}, topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
+    print(f"topSpace: {topSpace}, bottomSpace: {bottomSpace}, topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
 
     # print(f"newInp dim is: {newInp.shape}")
 
+    # Do this with np.append instead
     # First handle columns
     if leftCol:
-        newInp = np.array([np.full((len(newInp), len(newInp[0]), len(newInp[0][0]), 1), '.'), newInp])
+        newInp = np.append(np.full((len(newInp), len(newInp[0]), len(newInp[0][0]), 1), '.'), newInp, axis=3)
         # print(f"newInp dim is: {newInp.shape}")
 
     if rightCol:
-        newInp = np.array([newInp, np.full((len(newInp), len(newInp[0]), len(newInp[0][0]), 1), '.')])
+        newInp = np.append(newInp, np.full((len(newInp), len(newInp[0]), len(newInp[0][0]), 1), '.'), axis=3)
         # print(f"newInp dim is: {newInp.shape}")
 
     # Then rows
@@ -196,20 +203,31 @@ def expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bot
 
     # Then 4th D
     if topSpace:
-        newInp = np.array([np.full((1, len(newInp[0]), len(newInp[0][0]), len(newInp[0][0][0])), '.'), newInp])
+        newInp = np.append(np.full((1, len(newInp[0]), len(newInp[0][0]), len(newInp[0][0][0])), '.'), newInp, axis=0)
         # print(f"newInp dim is: {newInp.shape}")
 
     if bottomSpace:
-        newInp = np.array([ newInp, np.full((1, len(newInp[0]), len(newInp[0][0]), len(newInp[0][0][0])), '.') ])
+        newInp = np.append( newInp, np.full((1, len(newInp[0]), len(newInp[0][0]), len(newInp[0][0][0])), '.'), axis=0)
         # print(f"newInp dim is: {newInp.shape}")
+
+    return newInp
 
 # Assumes at least 1 cycle will be run
 def runCycles(inp, numCycles):
     
     for _ in range(numCycles):
+        print()
+        print("Before cycle")
+        print("".rjust(30, "~"))
+        pprint(inp)
+        print("".rjust(30, "~"))
         inp, numActive = cycle(inp)
+        pprint(inp)
+        print("".rjust(30, "~"))
+        print("".rjust(30, "~"))
 
     return numActive
 
-inp = parseInput(Path("./input/puzzle_input").read_text())
-print(inp)
+# inp = parseInput(Path("./input/puzzle_input").read_text())
+inp = parseInput(Path("./input/test_input").read_text())
+print(runCycles(inp, 2))

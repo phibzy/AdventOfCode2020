@@ -226,6 +226,7 @@ def runCycles(inp, numCycles):
     
     for _ in range(numCycles):
         inp, numActive = cycle(inp)
+        # pprint.pprint(inp)
 
     return numActive
 
