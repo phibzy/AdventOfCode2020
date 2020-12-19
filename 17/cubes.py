@@ -243,4 +243,4 @@ Notes:
 
 # inp = parseSlice(Path("./input/puzzle_input").read_text())
 inp = parseSlice(Path("./input/puzzle_input").read_text())
-print(runCycles(inp, 6))
+# print(runCycles(inp, 6))
