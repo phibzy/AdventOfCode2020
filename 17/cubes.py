@@ -31,27 +31,23 @@ def parseSlice(inp):
     # Our slice is going to be a 2d list 
     sl = list()
 
-    # Have to convert to string since strings
+    # Have to convert to list since strings
     # can't be modified, even though they're technically lists
     for line in inp.strip().split("\n"):
         # Add in the col padding while we're here
         sl.append(['.'] + list(line) + ['.'])
 
     # Add in the row padding 
-    rPadding = [ '.' for _ in range(len(sl[0])) ]
-    sl = [rPadding] + sl + [rPadding.copy()]
+    sl = [[ '.' for _ in range(len(sl[0])) ]] + sl + [[ '.' for _ in range(len(sl[0])) ]]
 
     # Create our 3d spaaaaace
     space = list()
 
-    # Create a completely inactive 2d slice of padding
-    padSlice = [ [ "."  for col in row ] for row in sl ]
-
-    # Pad our 2d slice with slices on top and bottom
-    space.append(padSlice) 
+    # Pad our 2d slice with empty 2d slices on top and bottom
+    space.append([ [ "."  for col in row ] for row in sl ]) 
     space.append(sl) 
-    space.append(padSlice.copy()) 
-
+    space.append([ [ "."  for col in row ] for row in sl ]) 
+    
     return space
 
 def cycle(inp):
@@ -110,11 +106,11 @@ def cycle(inp):
 
                 # print(f"val: {newInp[z][y][x]}")
     
-    print("".rjust(30, '$'))
-    pprint.pprint(newInp)
+    # print("".rjust(30, '$'))
+    # pprint.pprint(newInp)
 
-    print("".rjust(30, '$'))
-    print("".rjust(30, '$'))
+    # print("".rjust(30, '$'))
+    # print("".rjust(30, '$'))
     # Expand newInp based on flags
     # Use new list comprehensions for each row/plane this time ;)
     expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
@@ -124,28 +120,28 @@ def cycle(inp):
 # Expand padding if we have new values in original padding
 def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
     
-    print(f"topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
+    # print(f"topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
 
-    print()
-    pprint.pprint(newInp)
+    # print()
+    # pprint.pprint(newInp)
 
     # First handle columns
     if leftCol or rightCol:
         for plane in newInp:
-            print("".rjust(30, "~"))
-            print("Plane before:")
-            pprint.pprint(plane)
-            print()
+            # print("".rjust(30, "~"))
+            # print("Plane before:")
+            # pprint.pprint(plane)
+            # print()
 
 
             for row in range(len(plane)):
                 if leftCol: plane[row].insert(0, '.')
                 if rightCol: plane[row].append('.' )
 
-            print("Plane after:")
-            pprint.pprint(plane)
-            print()
-            print("".rjust(30, "~"))
+            # print("Plane after:")
+            # pprint.pprint(plane)
+            # print()
+            # print("".rjust(30, "~"))
 
 
     # Then rows
@@ -161,10 +157,10 @@ def expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightC
     if bottomPlane:
         newInp.append([ [ "."  for col in row ] for row in newInp[0] ])
 
-    print()
-    print("".rjust(30, "~"))
-    print()
-    pprint.pprint(newInp)
+    # print()
+    # print("".rjust(30, "~"))
+    # print()
+    # pprint.pprint(newInp)
 
 
 def updateCube(inp, z, y, x, zLength, yLength, xLength):
