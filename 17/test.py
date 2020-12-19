@@ -9,7 +9,7 @@
 
 import unittest
 from pathlib import Path
-from pt2 import parseInput, cycle #, updateSpace, expandGrid, runCycles
+from pt2 import parseInput, cycle, runCycles
 
 class testPt2(unittest.TestCase):
 
@@ -18,3 +18,5 @@ class testPt2(unittest.TestCase):
     def testCycle(self):
         self.assertEqual(cycle(self.testInput[0])[1], 29)
 
+    def testRunCycles(self):
+        self.assertEqual(runCycles(self.testInput[0], 6), 848)

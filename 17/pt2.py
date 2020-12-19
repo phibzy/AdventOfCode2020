@@ -108,6 +108,7 @@ def cycle(inp):
     
     # print("".rjust(30, '$'))
     # pprint.pprint(newInp)
+    print(activeCount)
 
     # print("".rjust(30, '$'))
     # print("".rjust(30, '$'))
