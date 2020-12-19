@@ -169,7 +169,7 @@ def updateSpace(inp, w, z, y, x, wLength, zLength, yLength, xLength):
 
 # One of these expansions isn't working properly
 def expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol):
-    print(f"topSpace: {topSpace}, bottomSpace: {bottomSpace}, topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
+    # print(f"topSpace: {topSpace}, bottomSpace: {bottomSpace}, topPlane: {topPlane}, bottomPlane: {bottomPlane}, topRow: {topRow}, bottomRow: {bottomRow}, leftCol: {leftCol}, rightCol: {rightCol}")
 
     # print(f"newInp dim is: {newInp.shape}")
 
@@ -216,18 +216,18 @@ def expandGrid(newInp, topSpace, bottomSpace, topPlane, bottomPlane, topRow, bot
 def runCycles(inp, numCycles):
     
     for _ in range(numCycles):
-        print()
-        print("Before cycle")
-        print("".rjust(30, "~"))
-        pprint(inp)
-        print("".rjust(30, "~"))
+        # print()
+        # print("Before cycle")
+        # print("".rjust(30, "~"))
+        # pprint(inp)
+        # print("".rjust(30, "~"))
         inp, numActive = cycle(inp)
-        pprint(inp)
-        print("".rjust(30, "~"))
-        print("".rjust(30, "~"))
+        # pprint(inp)
+        # print("".rjust(30, "~"))
+        # print("".rjust(30, "~"))
 
     return numActive
 
-# inp = parseInput(Path("./input/puzzle_input").read_text())
-inp = parseInput(Path("./input/test_input").read_text())
-print(runCycles(inp, 2))
+inp = parseInput(Path("./input/puzzle_input").read_text())
+# inp = parseInput(Path("./input/test_input").read_text())
+print(runCycles(inp, 6))

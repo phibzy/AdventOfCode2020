@@ -19,4 +19,5 @@ class testPt2(unittest.TestCase):
         self.assertEqual(cycle(self.testInput[0])[1], 29)
 
     def testRunCycles(self):
-        self.assertEqual(runCycles(self.testInput[0], 2), 45)
+        self.assertEqual(runCycles(self.testInput[0], 2), 60)
+        self.assertEqual(runCycles(self.testInput[0], 6), 848)
