@@ -115,6 +115,8 @@ def cycle(inp):
     # Use new list comprehensions for each row/plane this time ;)
     expandGrid(newInp, topPlane, bottomPlane, topRow, bottomRow, leftCol, rightCol)
 
+    # pprint.pprint(newInp)
+
     return (newInp, activeCount)
 
 # Expand padding if we have new values in original padding
