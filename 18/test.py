@@ -10,7 +10,7 @@
 
 import unittest
 from pathlib import Path
-from operations import evaluate
+from operations import evaluate, evaluate2
 
 class testOps(unittest.TestCase):
 
@@ -29,3 +29,8 @@ class testOps(unittest.TestCase):
         self.assertEqual(evaluate(self.testInput[8]), 62673715200)
         self.assertEqual(evaluate(self.testInput[9]), 1000)
 
+    def testEvaluate2(self):
+        self.assertEqual(evaluate2(self.testInput[0]), 46)
+        self.assertEqual(evaluate2(self.testInput[1]), 1445)
+        self.assertEqual(evaluate2(self.testInput[2]), 669060)
+        self.assertEqual(evaluate2(self.testInput[3]), 23340)
