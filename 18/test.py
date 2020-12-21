@@ -18,10 +18,14 @@ class testOps(unittest.TestCase):
     testInput = [ f.read_text() for f in sorted(testPath.glob("test*")) ]
 
     def testEvaluate(self):
-        # self.assertEqual(evaluate(self.testInput[0]), 26)
-        # self.assertEqual(evaluate(self.testInput[1]), 437)
-        # self.assertEqual(evaluate(self.testInput[2]), 12240)
-        # self.assertEqual(evaluate(self.testInput[3]), 13632)
-        # self.assertEqual(evaluate(self.testInput[4]), 26335)
+        self.assertEqual(evaluate(self.testInput[0]), 26)
+        self.assertEqual(evaluate(self.testInput[1]), 437)
+        self.assertEqual(evaluate(self.testInput[2]), 12240)
+        self.assertEqual(evaluate(self.testInput[3]), 13632)
+        self.assertEqual(evaluate(self.testInput[4]), 26335)
         self.assertEqual(evaluate(self.testInput[5]), 90)
+        self.assertEqual(evaluate(self.testInput[6]), 588968)
+        self.assertEqual(evaluate(self.testInput[7]), 1046)
+        self.assertEqual(evaluate(self.testInput[8]), 62673715200)
+        self.assertEqual(evaluate(self.testInput[9]), 1000)
 
