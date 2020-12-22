@@ -117,8 +117,6 @@ def evalLine(line):
 
 # Function for evalutating each line
 def evalLine2(line):
-    # print(line)
-    # print("".rjust(30, "~"))
     # Map the symbols to the right function call
     opF = {"+": add, "*": mul}
 
