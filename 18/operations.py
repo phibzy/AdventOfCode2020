@@ -173,11 +173,6 @@ def evalLine2(line):
         elif char in opF:
             currOp = char
 
-            # Can evaluate previous mulitply op
-            # if there's nothing with higher precedence
-            if char == "*" and mStack:
-                currTotal *= mStack.pop()
-
         # Otherwise it's a number
         # Convert it to an int and then apply our current operator
         else:
@@ -203,6 +198,8 @@ def evalLine2(line):
         
         i += 1
 
+    # Only unpack mStack at end of bracket expression
+    # or at the end of input
     while mStack:
         currTotal *= mStack.pop()
 
@@ -215,4 +212,3 @@ inp = Path("./input/puzzle_input").read_text()
 
 # Pt. 2
 print(evaluate2(inp))
-# print(evaluate2("2*3 + (4*5)"))
