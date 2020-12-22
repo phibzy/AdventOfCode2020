@@ -19,6 +19,8 @@ class test(unittest.TestCase):
 
     def testMessages(self):
         self.assertEqual(checkMessages(*self.testInput[0]), 2)
+        self.assertEqual(checkMessages(*self.testInput[2]), 3)
+        self.assertEqual(checkMessages(*self.testInput[3]), 12)
 
     def testValid(self):
         # Test input 1
@@ -35,3 +37,4 @@ class test(unittest.TestCase):
 
         self.assertTrue(checkValid("ababbb", self.testInput[1][0], "0", 0)[0])
         self.assertTrue(checkValid("abbbab", self.testInput[1][0], "0", 0)[0])
+

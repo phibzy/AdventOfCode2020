@@ -79,11 +79,13 @@ def checkValid(m, ruleDict, rule, i):
             # If the rule doesn't hold, don't bother checking further
             if not valid: break
 
+        # This needs changing
         # if one of the list of rules holds, it's valid!
         if valid: break
 
     return (valid, i)
 
-inp = parseInput(Path("./input/puzzle_input").read_text())
+# inp = parseInput(Path("./input/puzzle_input").read_text())
+inp = parseInput(Path("./input/puzzle_input2").read_text())
 print(checkMessages(*inp))
 
