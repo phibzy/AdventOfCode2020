@@ -32,5 +32,58 @@ def parseInput(inp):
 
     return (ruleDict, msgList)
 
+def checkMessages(ruleDict, msgList):
+    total = 0
+
+    # Check if each message is valid according to rule 0
+    # increment our counter if it is
+    for m in msgList:
+        v, i = checkValid(m, ruleDict, "0", 0)
+
+        # If there's still string remaining after the rules
+        # have been checked, it can't be valid
+        if i != len(m): v = False
+        total += v
+
+    return total
+
+# Recursion time!
+# This will return a valid flag as well as an index,
+# so we don't lose track of our position
+def checkValid(m, ruleDict, rule, i):
+    # Keep track of where we start for each call
+    startIndex = i
+    valid = False
+
+    # Remember it may be possible to reach end of string
+    # before end of rule, so account for that
+    for r in ruleDict[rule]:
+        # Reset for each rule in list
+        i = startIndex
+
+        for num in r:
+            # Break if we run out of string
+            if i >= len(m): 
+                valid = False
+                break
+
+            # If it's a number, we need to call a rule
+            if num.isdigit():
+                valid, i = checkValid(m, ruleDict, num, i)
+            
+            # Otherwise it's a letter, so do a direct comparison
+            else:
+                valid = (m[i] == num) 
+                i += 1
+            
+            # If the rule doesn't hold, don't bother checking further
+            if not valid: break
+
+        # if one of the list of rules holds, it's valid!
+        if valid: break
+
+    return (valid, i)
+
 inp = parseInput(Path("./input/puzzle_input").read_text())
+print(checkMessages(*inp))
 
