@@ -43,6 +43,11 @@ def checkMessages(ruleDict, msgList):
         # If there's still string remaining after the rules
         # have been checked, it can't be valid
         if i != len(m): v = False
+
+        if v:
+            print(f"{m} is valid!")
+
+        # Add to total if valid
         total += v
 
     return total
@@ -51,6 +56,13 @@ def checkMessages(ruleDict, msgList):
 # This will return a valid flag as well as an index,
 # so we don't lose track of our position
 def checkValid(m, ruleDict, rule, i):
+    print()
+    print("".rjust(30, "~"))
+    print("New call" + "".rjust(20, "-"))
+    print(f"rule: {rule}, i: {i}")
+
+    print("".rjust(28, "-"))
+
     # Keep track of where we start for each call
     startIndex = i
     valid = False
@@ -60,16 +72,22 @@ def checkValid(m, ruleDict, rule, i):
     for r in ruleDict[rule]:
         # Reset for each rule in list
         i = startIndex
+        print(f"rule: {rule}, subRule: {r}, i: {i}")
+        valid = False
 
         for num in r:
             # Break if we run out of string
             if i >= len(m): 
+                print(f"Run out of string on {num} in subList {r} in {rule}...")
                 valid = False
                 break
 
+            print(f"curr char: {m[i]}")
             # If it's a number, we need to call a rule
             if num.isdigit():
+                print(f"Calling rule {num} from {rule} in group {r}...")
                 valid, i = checkValid(m, ruleDict, num, i)
+                print(f"Coming back to group {r} from {rule} ...")
             
             # Otherwise it's a letter, so do a direct comparison
             else:
@@ -77,7 +95,9 @@ def checkValid(m, ruleDict, rule, i):
                 i += 1
             
             # If the rule doesn't hold, don't bother checking further
-            if not valid: break
+            if not valid: 
+                # print(f"rule {r} does not hold for {i}: {m[i]}")
+                break
 
         # This needs changing
         # if one of the list of rules holds, it's valid!
@@ -86,6 +106,7 @@ def checkValid(m, ruleDict, rule, i):
     return (valid, i)
 
 # inp = parseInput(Path("./input/puzzle_input").read_text())
-inp = parseInput(Path("./input/puzzle_input2").read_text())
-print(checkMessages(*inp))
-
+inp = parseInput(Path("./input/test4").read_text())
+# inp = parseInput(Path("./input/puzzle_input2").read_text())
+# print(checkMessages(*inp))
+# print(checkValid("aaaaabbaabaaaaababaa", inp[0], "0", 0))
