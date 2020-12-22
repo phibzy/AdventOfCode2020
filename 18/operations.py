@@ -133,36 +133,34 @@ def evalLine2(line):
 
     # Create extra stack for '*' operator
     mStack = list()
-    flagStack = list()
-    mFlag = False
 
     # Go char by char
     i = 0
     while i < len(line):
-        print("".rjust(30, "#"))
-        print(currTotal)
         char = line[i]
-        # print(char)
 
         # Bracket expression, so store what we have on stack
         if char == "(":
-            lastVal.append(currTotal)
+            # For pt. 2, also push mStack
+            lastVal.append((currTotal, mStack))
             lastOp.append(currOp)
-            flagStack.append(mFlag)
 
             # Reset these in case our lastOp was *
-            currTotal, currOp = 0, "+"
-            mFlag = False
+            currTotal, currOp, mStack = 0, "+", list()
 
         # Bracket expression ends, unwind the stack 1 step
         elif char == ")":
+            
+            # Unpack current mStack
+            while mStack:
+                currTotal *= mStack.pop()
+
             # Be careful of case where there's nothing before
             # bracket expression
             if lastOp:
                 # If there's a lastOp, there must be a lastVal
                 currLop = lastOp.pop()
-                currLv = lastVal.pop()
-                if flagStack: mFlag = flagStack.pop()
+                currLv, mStack = lastVal.pop()
 
                 if currLop == "*":
                     mStack.append(currLv)
@@ -177,28 +175,24 @@ def evalLine2(line):
 
             # Can evaluate previous mulitply op
             # if there's nothing with higher precedence
-            if char == "*" and mStack and mFlag:
+            if char == "*" and mStack:
                 currTotal *= mStack.pop()
 
         # Otherwise it's a number
         # Convert it to an int and then apply our current operator
         else:
-            print("".rjust(30, "~"))
             num = 0
             while i < len(line) and line[i].isdigit():
                 num = num * 10 + int(line[i])
                 i += 1
 
-            print(f"currOp: {currOp}, currTotal: {currTotal}, num: {num}")
-
             # Pt. 2:
             # Only thing we need to handle differently is +/* ops
             # Don't evaluate immediately if it's a * sign, keep track
-            # of current total on stack
+            # of current total on mStack
             if currOp == "*":
                 mStack.append(currTotal)
                 currTotal = num
-                mFlag = True
 
             else:
                 currTotal = opF[currOp](currTotal, num)
@@ -220,5 +214,5 @@ inp = Path("./input/puzzle_input").read_text()
 # print(evaluate(inp))
 
 # Pt. 2
-# print(evaluate2(inp))
-print(evaluate2("2*3 + (4*5)"))
+print(evaluate2(inp))
+# print(evaluate2("2*3 + (4*5)"))
