@@ -38,17 +38,15 @@ def checkMessages(ruleDict, msgList):
     # Check if each message is valid according to rule 0
     # increment our counter if it is
     for m in msgList:
-        v, i = checkValid(m, ruleDict, "0", 0)
+        validList = checkValid(m, ruleDict, "0", 0)
 
-        # If there's still string remaining after the rules
-        # have been checked, it can't be valid
-        if i != len(m): v = False
-
-        if v:
-            print(f"{m} is valid!")
+        # Check that none of the valid checks
+        # left off the end of the string
+        valid = [ v for v in validList if v == len(m) ]
 
         # Add to total if valid
-        total += v
+        if valid:
+            total += 1
 
     return total
 
@@ -56,57 +54,65 @@ def checkMessages(ruleDict, msgList):
 # This will return a valid flag as well as an index,
 # so we don't lose track of our position
 def checkValid(m, ruleDict, rule, i):
-    print()
-    print("".rjust(30, "~"))
-    print("New call" + "".rjust(20, "-"))
-    print(f"rule: {rule}, i: {i}")
 
-    print("".rjust(28, "-"))
+
+    # print("".rjust(30, "~"))
+    # print(f"Calling rule {rule} at index {i}")
+    # print()
+    # Don't even bother if we've run out of string
+    if i >= len(m): return []
 
     # Keep track of where we start for each call
     startIndex = i
-    valid = False
+    validIndices = list()
 
     # Remember it may be possible to reach end of string
     # before end of rule, so account for that
     for r in ruleDict[rule]:
         # Reset for each rule in list
         i = startIndex
-        print(f"rule: {rule}, subRule: {r}, i: {i}")
-        valid = False
 
+        checkIndices = [i]
         for num in r:
-            # Break if we run out of string
-            if i >= len(m): 
-                print(f"Run out of string on {num} in subList {r} in {rule}...")
-                valid = False
-                break
+            # print(f"At num {num} in subList {r}")
+            nextList = list()
 
-            print(f"curr char: {m[i]}")
             # If it's a number, we need to call a rule
             if num.isdigit():
-                print(f"Calling rule {num} from {rule} in group {r}...")
-                valid, i = checkValid(m, ruleDict, num, i)
-                print(f"Coming back to group {r} from {rule} ...")
+                for checkI in checkIndices:
+                    iList = checkValid(m, ruleDict, num, checkI)
+                    # print(f"Returning to {num} in subList {r}")
+                    # print(f"iList is {iList}")
+
+                    nextList += iList 
+                    # print(f"Nextlist is {nextList}")
+                    # print()
             
             # Otherwise it's a letter, so do a direct comparison
             else:
-                valid = (m[i] == num) 
-                i += 1
-            
-            # If the rule doesn't hold, don't bother checking further
-            if not valid: 
-                # print(f"rule {r} does not hold for {i}: {m[i]}")
-                break
+                # print("It's a letter!")
+                for checkI in checkIndices:
+                    if checkI >= len(m): continue
+                    if m[checkI] == num:
+                        # print("We match")
+                        validIndices.append(checkI + 1)
 
-        # This needs changing
-        # if one of the list of rules holds, it's valid!
-        if valid: break
+            checkIndices = nextList
 
-    return (valid, i)
+            # If there's no possible path of rules being upheld,
+            # we're donezo
+            if not nextList: break
 
+        # If we've gone through the rules and we still have a
+        # list of checkIndices - all elements in that list must be validIndices
+        if checkIndices: validIndices += checkIndices
+
+    # print(validIndices)
+    return validIndices
+
+# Pt. 1
 # inp = parseInput(Path("./input/puzzle_input").read_text())
-inp = parseInput(Path("./input/test4").read_text())
-# inp = parseInput(Path("./input/puzzle_input2").read_text())
-# print(checkMessages(*inp))
-# print(checkValid("aaaaabbaabaaaaababaa", inp[0], "0", 0))
+
+# Pt. 2
+inp = parseInput(Path("./input/puzzle_input2").read_text())
+print(checkMessages(*inp))
