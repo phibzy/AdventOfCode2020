@@ -5,6 +5,16 @@
   @created     : Tuesday Dec 22, 2020 11:20:46 AEDT
   @file        : messages
 
+  My part 1 originally had a bug but it passed the check anyway/
+
+  Original part 1 always instantly terminated a recursive call if it
+  found a valid path. This was problematic because different valid
+  paths return different finishing indices. So while yes, it was valid
+  for some condition of a rule, in the long run it wouldn't validate 
+  some messages since these messages depended on particular
+  validation paths. So I changed it to explore every possible
+  validation path.
+
 """
 
 from pathlib import Path
@@ -51,15 +61,12 @@ def checkMessages(ruleDict, msgList):
     return total
 
 # Recursion time!
-# This will return a valid flag as well as an index,
-# so we don't lose track of our position
+# This function returns a list of indexes
+# These indexes are used as starting points
+# for the next recursive calls
 def checkValid(m, ruleDict, rule, i):
-
-
-    # print("".rjust(30, "~"))
-    # print(f"Calling rule {rule} at index {i}")
-    # print()
-    # Don't even bother if we've run out of string
+    # If we've gone past the end of the list,
+    # there's no way it can be valid
     if i >= len(m): return []
 
     # Keep track of where we start for each call
@@ -71,30 +78,31 @@ def checkValid(m, ruleDict, rule, i):
     for r in ruleDict[rule]:
         # Reset for each rule in list
         i = startIndex
-
+        
+        # We use a list of checkIndices because
+        # we want to keep track of all the different
+        # ways a string could be valid. While it may match
+        # the first possible condition, later on down the track
+        # it may turn out that another condition is the only
+        # one that leads to the full message being considered valid
         checkIndices = [i]
         for num in r:
-            # print(f"At num {num} in subList {r}")
             nextList = list()
 
             # If it's a number, we need to call a rule
             if num.isdigit():
+                # For each different starting index,
+                # check the rule is valid
                 for checkI in checkIndices:
+                    # See if there's any valid starting indices
                     iList = checkValid(m, ruleDict, num, checkI)
-                    # print(f"Returning to {num} in subList {r}")
-                    # print(f"iList is {iList}")
-
                     nextList += iList 
-                    # print(f"Nextlist is {nextList}")
-                    # print()
             
             # Otherwise it's a letter, so do a direct comparison
             else:
-                # print("It's a letter!")
                 for checkI in checkIndices:
                     if checkI >= len(m): continue
                     if m[checkI] == num:
-                        # print("We match")
                         validIndices.append(checkI + 1)
 
             checkIndices = nextList
@@ -103,11 +111,10 @@ def checkValid(m, ruleDict, rule, i):
             # we're donezo
             if not nextList: break
 
-        # If we've gone through the rules and we still have a
+        # If we've gone through all the rules and we still have a
         # list of checkIndices - all elements in that list must be validIndices
         if checkIndices: validIndices += checkIndices
 
-    # print(validIndices)
     return validIndices
 
 # Pt. 1
