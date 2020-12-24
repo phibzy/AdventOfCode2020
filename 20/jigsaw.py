@@ -62,10 +62,11 @@ def parseInput(inp):
         leftCol = np.reshape(grid[:,:1], (1,10))
         rightCol = np.reshape(grid[:,-1:], (1,10))
 
+        # Put them into dict, with edge order preserved
         tileDict[tileID] = [topRow, rightCol, bottomRow, rightCol]
 
 
-        # Weird case: multiple of same age in tile, but unique to tile
+        # Weird case: multiple of same edge in tile, but unique to tile
 
 # inp = Path("./input/puzzle_input").read_text()
 inp = Path("./input/test1").read_text()
