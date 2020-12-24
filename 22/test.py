@@ -9,7 +9,7 @@
 
 import unittest
 from pathlib import Path
-from combat import parseInput, findResult
+from combat import parseInput, findResult, pt2
 from collections import deque
 
 class testCombat(unittest.TestCase):
@@ -22,3 +22,6 @@ class testCombat(unittest.TestCase):
 
     def testFindResult(self):
         self.assertEqual(findResult(*self.testInput[0]), 306) 
+
+    def testPt2(self):
+        self.assertEqual(pt2(*self.testInput[0], 1), 291) 

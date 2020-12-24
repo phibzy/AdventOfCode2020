@@ -61,6 +61,8 @@ def findResult(p1d, p2d):
 
 # Checks to see who wins a given round
 # Returns 1 if player 1 wins, 2 if player 2 wins
+# FirstCall used to check if current function call was the initial 
+# one. If yes, then we return the result sum instead.
 def pt2(p1d, p2d, firstCall):
     # So my tests don't get upset
     # This also preserves isolation of slices
