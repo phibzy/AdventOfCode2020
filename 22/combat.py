@@ -47,18 +47,138 @@ def findResult(p1d, p2d):
             p2Deck.appendleft(p2Card)
             p2Deck.appendleft(p1Card)
 
+    # WinningDeck is whichever one of the two
+    # still has cards in it
     winningDeck = p1Deck or p2Deck
 
+    # Loop through each item in winning deck,
+    # multiplying it by its 1-index
     result = 0
-    for num, i in zip(winningDeck, range(1, len(winningDeck) + 1)):
-        result += i*num
+    for i, num in enumerate(winningDeck): 
+        result += (i+1)*num
 
     return result
 
-# While p1Deck and p2Deck
+def pt2(p1d, p2d):
+    # So my tests don't get upset
+    p1Deck = p1d.copy()
+    p2Deck = p2d.copy()
+
+    history = dict()
+
+    # Keep looping until one of the decks is empty
+    while p1Deck and p2Deck:
+        if str((p1Deck, p2Deck)) in history:
+            p2Deck = []
+            break
+
+        # Add current state to history
+        history[str((p1Deck, p2Deck))] = 1
+
+        # Draw cards from each deck
+        p1Card, p2Card = p1Deck.pop(), p2Deck.pop()
+
+        # Play a recursive game of
+        # recursive combat if there are at least 
+        # X amount of cards in each deck, where X
+        # is the value each drawn card for this turn
+        if len(p1Deck) >= p1Card and len(p2Deck) >= p2Card:
+            nextP1d = deque(list(p1Deck)[-p1Card:])
+            nextP2d = deque(list(p2Deck)[-p2Card:])
+            result = rCombatResult(nextP1d, nextP2d)
+
+        # Otherwise, use same rules as before
+        # and compare cards
+        else:
+            result = (p1Card > p2Card)
+
+        # If p1 won the round, do the same as before
+        # with cards on bottom of p1 deck
+        if result == 1:
+            p1Deck.appendleft(p1Card)
+            p1Deck.appendleft(p2Card)
+
+        # Same thing for p2 deck if p2 won
+        else:
+            p2Deck.appendleft(p2Card)
+            p2Deck.appendleft(p1Card)
+
+    # WinningDeck is whichever one of the two
+    # still has cards in it
+    winningDeck = p1Deck or p2Deck
+
+    # Loop through each item in winning deck,
+    # multiplying it by its 1-index
+    result = 0
+    for i, num in enumerate(winningDeck): 
+        result += (i+1)*num
+
+    return result
+
+# Checks to see who wins a given round
+# Returns 1 if player 1 wins, 2 if player 2 wins
+def rCombatResult(p1d, p2d):
+    # So my tests don't get upset
+    p1Deck = p1d.copy()
+    p2Deck = p2d.copy()
+
+    # Dict keeping track of whether we've had
+    # same deck formation before - prevents inf loop
+    history = dict()
+
+    # Keep looping until one of the decks is empty
+    while p1Deck and p2Deck:
+        # If we've seen this exact situation before,
+        # player 1 wins
+        if str((p1Deck, p2Deck)) in history:
+            return 1
+
+        # Add current state to history
+        history[str((p1Deck, p2Deck))] = 1
+
+        # Draw cards from each deck
+        p1Card, p2Card = p1Deck.pop(), p2Deck.pop()
+
+        # Play a recursive game of
+        # recursive combat if there are at least 
+        # X amount of cards in each deck, where X
+        # is the value each drawn card for this turn
+        if len(p1Deck) >= p1Card and len(p2Deck) >= p2Card:
+            # Have to be hacky since deques don't support slices
+            # But basically, convert to list, then take next
+            # X amount of cards, then convert back to deque
+            # so subcall works
+            nextP1d = deque(list(p1Deck)[-p1Card:])
+            nextP2d = deque(list(p2Deck)[-p2Card:])
+            result = rCombatResult(nextP1d, nextP2d)
+        
+        # Otherwise, use same rules as before
+        # and compare cards
+        else:
+            result = (p1Card > p2Card)
+
+        # If p1 won the round, do the same as before
+        # with cards on bottom of p1 deck
+        if result == 1:
+            p1Deck.appendleft(p1Card)
+            p1Deck.appendleft(p2Card)
+
+        # Same thing for p2 deck if p2 won
+        else:
+            p2Deck.appendleft(p2Card)
+            p2Deck.appendleft(p1Card)
+
+    # If p1's deck is the one left, they win
+    if p1Deck: return 1
+
+    # Otherwise p2 wins
+    return 2
 
 inp = parseInput(Path("./input/puzzle_input").read_text()) 
 
 # Pt.1
 print(findResult(*inp))
+
+# Pt. 2
+print(pt2(*inp))
 
