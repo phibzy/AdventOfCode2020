@@ -15,6 +15,8 @@ from pathlib import Path
 def parseInput(inp):
     return list(map(int, list(inp.strip())))
 
+# Pt.1 algo too inefficent for pt. 2
+# Will work on new algo for pt. 2
 def playGame(inp, numMoves):
     # Run the damn function for
     # however many moves!
